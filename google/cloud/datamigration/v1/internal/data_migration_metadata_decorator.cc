@@ -44,6 +44,14 @@ DataMigrationServiceMetadata::DataMigrationServiceMetadata(
               ? google::cloud::internal::GeneratedLibClientHeader()
               : std::move(api_client_header)) {}
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DataMigrationServiceMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options);
+  return child_->ListLocations(context, options, request);
+}
+
 StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
 DataMigrationServiceMetadata::ListMigrationJobs(
     grpc::ClientContext& context, Options const& options,

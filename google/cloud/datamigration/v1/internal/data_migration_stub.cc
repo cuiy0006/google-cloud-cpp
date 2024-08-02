@@ -21,6 +21,7 @@
 #include "google/cloud/status_or.h"
 #include <google/cloud/clouddms/v1/clouddms.grpc.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 #include <utility>
 
@@ -30,6 +31,18 @@ namespace datamigration_v1_internal {
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 
 DataMigrationServiceStub::~DataMigrationServiceStub() = default;
+
+StatusOr<google::cloud::location::ListLocationsResponse>
+DefaultDataMigrationServiceStub::ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) {
+  google::cloud::location::ListLocationsResponse response;
+  auto status = locations_stub_->ListLocations(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
+}
 
 StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
 DefaultDataMigrationServiceStub::ListMigrationJobs(

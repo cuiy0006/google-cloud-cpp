@@ -35,6 +35,18 @@ DataMigrationServiceLogging::DataMigrationServiceLogging(
     TracingOptions tracing_options, std::set<std::string> const&)
     : child_(std::move(child)), tracing_options_(std::move(tracing_options)) {}
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DataMigrationServiceLogging::ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) {
+  return google::cloud::internal::LogWrapper(
+      [this](grpc::ClientContext& context, Options const& options,
+             google::cloud::location::ListLocationsRequest const& request) {
+        return child_->ListLocations(context, options, request);
+      },
+      context, options, request, __func__, tracing_options_);
+}
+
 StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
 DataMigrationServiceLogging::ListMigrationJobs(
     grpc::ClientContext& context, Options const& options,
