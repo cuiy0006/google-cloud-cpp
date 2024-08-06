@@ -38,6 +38,13 @@ GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
 
 DataMigrationServiceConnection::~DataMigrationServiceConnection() = default;
 
+StreamRange<google::cloud::location::Location>
+DataMigrationServiceConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
 StreamRange<google::cloud::clouddms::v1::MigrationJob>
 DataMigrationServiceConnection::ListMigrationJobs(
     google::cloud::clouddms::v1::

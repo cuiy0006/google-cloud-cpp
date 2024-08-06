@@ -31,6 +31,16 @@ DataMigrationServiceAuth::DataMigrationServiceAuth(
     std::shared_ptr<DataMigrationServiceStub> child)
     : auth_(std::move(auth)), child_(std::move(child)) {}
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DataMigrationServiceAuth::ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) {
+  google::cloud::location::ListLocationsResponse response;
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->ListLocations(context, options, request);
+}
+
 StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
 DataMigrationServiceAuth::ListMigrationJobs(
     grpc::ClientContext& context, Options const& options,

@@ -39,6 +39,10 @@ class DataMigrationServiceAuth : public DataMigrationServiceStub {
       std::shared_ptr<google::cloud::internal::GrpcAuthenticationStrategy> auth,
       std::shared_ptr<DataMigrationServiceStub> child);
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
   StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
   ListMigrationJobs(grpc::ClientContext& context, Options const& options,
                     google::cloud::clouddms::v1::ListMigrationJobsRequest const&

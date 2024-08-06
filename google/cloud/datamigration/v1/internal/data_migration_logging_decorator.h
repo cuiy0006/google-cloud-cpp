@@ -39,6 +39,10 @@ class DataMigrationServiceLogging : public DataMigrationServiceStub {
                               TracingOptions tracing_options,
                               std::set<std::string> const& components);
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
   StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
   ListMigrationJobs(grpc::ClientContext& context, Options const& options,
                     google::cloud::clouddms::v1::ListMigrationJobsRequest const&

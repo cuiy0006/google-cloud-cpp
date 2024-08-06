@@ -90,6 +90,10 @@ class DataMigrationServiceClient {
   }
   ///@}
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+    google::cloud::location::ListLocationsRequest request,
+    Options opts = {});
+
   // clang-format off
   ///
   /// Lists migration jobs in a given project and location.

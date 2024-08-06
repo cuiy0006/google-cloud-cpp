@@ -35,6 +35,11 @@ DataMigrationServiceConnectionIdempotencyPolicy::clone() const {
       *this);
 }
 
+Idempotency DataMigrationServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
 Idempotency DataMigrationServiceConnectionIdempotencyPolicy::ListMigrationJobs(
     google::cloud::clouddms::v1::ListMigrationJobsRequest) {  // NOLINT
   return Idempotency::kIdempotent;

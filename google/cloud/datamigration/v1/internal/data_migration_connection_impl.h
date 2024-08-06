@@ -52,6 +52,9 @@ class DataMigrationServiceConnectionImpl
 
   Options options() override { return options_; }
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
   StreamRange<google::cloud::clouddms::v1::MigrationJob> ListMigrationJobs(
       google::cloud::clouddms::v1::ListMigrationJobsRequest request) override;
 

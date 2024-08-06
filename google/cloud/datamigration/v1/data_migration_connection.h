@@ -32,6 +32,8 @@
 #include "google/cloud/version.h"
 #include <google/cloud/clouddms/v1/clouddms.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+
 #include <memory>
 
 namespace google {
@@ -190,6 +192,10 @@ class DataMigrationServiceConnection {
   virtual ~DataMigrationServiceConnection() = 0;
 
   virtual Options options() { return Options{}; }
+
+  virtual StreamRange<google::cloud::location::Location>
+  ListLocations(
+    google::cloud::location::ListLocationsRequest request);
 
   virtual StreamRange<google::cloud::clouddms::v1::MigrationJob>
   ListMigrationJobs(

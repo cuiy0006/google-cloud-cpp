@@ -29,9 +29,20 @@ int main(int argc, char* argv[]) try {
   auto client = datamigration::DataMigrationServiceClient(
       datamigration::MakeDataMigrationServiceConnection());
 
+  std::cout << "------------------------TEST ListMigrationJobs------------------------" << std::endl;
+  std::cout << "location.FullName() = " << location.FullName() << std::endl;
   for (auto mj : client.ListMigrationJobs(location.FullName())) {
     if (!mj) throw std::move(mj).status();
     std::cout << mj->DebugString() << "\n";
+  }
+
+  std::cout << "------------------------TEST ListLocations------------------------" << std::endl;
+  google::cloud::location::ListLocationsRequest ll_req;
+  *ll_req.mutable_name() = "projects/" + std::string(argv[1]);
+  std::cout << "ListLocationsRequest name = " << ll_req.name() << "\n";
+  for (auto l : client.ListLocations(ll_req)) {
+    if (!l) throw std::move(l).status();
+    std::cout << l->DebugString() << "\n";
   }
 
   return 0;
