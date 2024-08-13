@@ -96,6 +96,8 @@ add_library(
     internal/metadata_decorator_generator.h
     internal/metadata_decorator_rest_generator.cc
     internal/metadata_decorator_rest_generator.h
+    internal/mixin_utils.cc
+    internal/mixin_utils.h
     internal/mock_connection_generator.cc
     internal/mock_connection_generator.h
     internal/option_defaults_generator.cc

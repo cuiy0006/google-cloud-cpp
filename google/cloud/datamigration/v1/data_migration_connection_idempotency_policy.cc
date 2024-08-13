@@ -266,6 +266,16 @@ Idempotency DataMigrationServiceConnectionIdempotencyPolicy::FetchStaticIps(
   return Idempotency::kIdempotent;
 }
 
+Idempotency DataMigrationServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataMigrationServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DataMigrationServiceConnectionIdempotencyPolicy>
 MakeDefaultDataMigrationServiceConnectionIdempotencyPolicy() {
   return std::make_unique<DataMigrationServiceConnectionIdempotencyPolicy>();

@@ -1158,6 +1158,27 @@ TEST_F(CreateMethodVarsTest, FormatMethodCommentsMethodSignature) {
 )""");
 }
 
+TEST_F(CreateMethodVarsTest, abc) {
+  FileDescriptor const* f1 =
+      pool_.FindFileByName("google/foo/v1/service.proto");
+  google::protobuf::ServiceDescriptor const* service = f1->service(0);
+  google::protobuf::MethodDescriptor const* method = service->method(2);
+
+  std::cout << "service->method_count(): " << service->method_count()
+            << std::endl;
+  std::cout << "method->name(): " << method->name() << std::endl;
+  std::cout << "method->input_type()->full_name(): "
+            << method->input_type()->full_name() << std::endl;
+  std::cout << "method->output_type()->full_name(): "
+            << method->output_type()->full_name() << std::endl;
+
+  FileDescriptor const* f2 = service->file();
+  for (int i = 0; i < f2->service_count(); i++) {
+    std::cout << "f2->service(i)->name(): " << f2->service(i)->name()
+              << std::endl;
+  }
+}
+
 TEST_F(CreateMethodVarsTest, SkipMethodsWithDeprecatedFields) {
   FileDescriptor const* service_file_descriptor =
       pool_.FindFileByName("google/foo/v1/service.proto");
