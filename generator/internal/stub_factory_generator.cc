@@ -15,6 +15,7 @@
 #include "generator/internal/stub_factory_generator.h"
 #include "generator/internal/codegen_utils.h"
 #include "generator/internal/printer.h"
+#include "absl/strings/str_split.h"
 #include <google/protobuf/descriptor.h>
 
 namespace google {
@@ -86,7 +87,11 @@ Status StubFactoryGenerator::GenerateCc() {
                    "google/cloud/internal/algorithm.h",
                    "google/cloud/internal/opentelemetry.h",
                    "google/cloud/options.h", "google/cloud/log.h"});
-  CcSystemIncludes({vars("proto_grpc_header_path"), "memory", "utility"});
+  std::vector<std::string> headers =
+      absl::StrSplit(vars("mixin_proto_grpc_header_paths"), ",");
+  headers.insert(headers.end(),
+                 {vars("proto_grpc_header_path"), "memory", "utility"});  
+  CcSystemIncludes(headers);
 
   auto result = CcOpenNamespaces(NamespaceType::kInternal);
   if (!result.ok()) return result;

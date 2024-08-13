@@ -1,17 +1,17 @@
 #include "generator/internal/mixin_utils.h"
-#include <google/protobuf/compiler/code_generator.h>
-#include <unordered_map>
-#include <string>
-#include <vector>
-#include <yaml-cpp/yaml.h>
-#include <iostream>
 #include "google/cloud/log.h"
 #include "absl/types/optional.h"
+#include <google/protobuf/compiler/code_generator.h>
+#include <yaml-cpp/yaml.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
-using ::google::protobuf::FileDescriptor;
-using ::google::protobuf::ServiceDescriptor;
-using ::google::protobuf::MethodDescriptor;
 using ::google::protobuf::DescriptorPool;
+using ::google::protobuf::FileDescriptor;
+using ::google::protobuf::MethodDescriptor;
+using ::google::protobuf::ServiceDescriptor;
 
 namespace google {
 namespace cloud {
@@ -19,108 +19,125 @@ namespace generator_internal {
 namespace {
 
 std::unordered_map<std::string, std::string> mixin_proto_path_map = {
-    {"google.cloud.location.Locations", "google/cloud/location/locations.proto"},
+    {"google.cloud.location.Locations",
+     "google/cloud/location/locations.proto"},
     // {"google.iam.v1.IAMPolicy", "google/iam/v1/iam_policy.proto"},
     // {"google.longrunning.Operations", "google/longrunning/operations.proto"},
 };
 
-std::unordered_set<std::string> http_verbs = {"get", "post", "put", "patch", "delete"};
+std::unordered_set<std::string> http_verbs = {"get", "post", "put", "patch",
+                                              "delete"};
 
-std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(YAML::Node const& service_config) {
-    std::unordered_map<std::string, MixinMethodOverride> mixin_method_overrides;
-    if (service_config.Type() != YAML::NodeType::Map) return mixin_method_overrides;
-    auto const& http = service_config["http"];
-    if (http.Type() != YAML::NodeType::Map) return mixin_method_overrides;
-    auto const& rules = http["rules"];
-    if (rules.Type() != YAML::NodeType::Sequence) return mixin_method_overrides;
-    for (auto const& rule : rules) {
-        if (rule.Type() != YAML::NodeType::Map) continue;
-
-        auto const& selector = rule["selector"];
-        if (selector.Type() != YAML::NodeType::Scalar) continue;
-        std::string method_full_name = selector.as<std::string>();
-        
-        for (auto const& kv : rule) {
-            if (kv.first.Type() != YAML::NodeType::Scalar || kv.second.Type() != YAML::NodeType::Scalar) continue;
-
-            std::string http_verb = kv.first.as<std::string>();
-            if (http_verbs.find(http_verb) == http_verbs.end()) continue;
-            std::string http_path = kv.second.as<std::string>();
-
-            absl::optional<std::string> http_body;
-            if (rule["body"]) {
-                http_body = rule["body"].as<std::string>();
-            }
-            mixin_method_overrides[method_full_name] = MixinMethodOverride{http_verb, http_path, http_body};
-        }
-    }
+std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(
+    YAML::Node const& service_config) {
+  std::unordered_map<std::string, MixinMethodOverride> mixin_method_overrides;
+  if (service_config.Type() != YAML::NodeType::Map)
     return mixin_method_overrides;
+  auto const& http = service_config["http"];
+  if (http.Type() != YAML::NodeType::Map) return mixin_method_overrides;
+  auto const& rules = http["rules"];
+  if (rules.Type() != YAML::NodeType::Sequence) return mixin_method_overrides;
+  for (auto const& rule : rules) {
+    if (rule.Type() != YAML::NodeType::Map) continue;
+
+    auto const& selector = rule["selector"];
+    if (selector.Type() != YAML::NodeType::Scalar) continue;
+    std::string method_full_name = selector.as<std::string>();
+
+    for (auto const& kv : rule) {
+      if (kv.first.Type() != YAML::NodeType::Scalar ||
+          kv.second.Type() != YAML::NodeType::Scalar)
+        continue;
+
+      std::string http_verb = kv.first.as<std::string>();
+      if (http_verbs.find(http_verb) == http_verbs.end()) continue;
+      std::string http_path = kv.second.as<std::string>();
+
+      absl::optional<std::string> http_body;
+      if (rule["body"]) {
+        http_body = rule["body"].as<std::string>();
+      }
+      mixin_method_overrides[method_full_name] =
+          MixinMethodOverride{http_verb, http_path, http_body};
+    }
+  }
+  return mixin_method_overrides;
 }
 
-std::unordered_map<std::string, MixinMethodOverride> GetDedupedMixinMethodOverrides(YAML::Node const& service_config, ServiceDescriptor const& service) {
-    auto mixin_method_overrides = GetMixinMethodOverrides(service_config);
-    for (int i = 0; i < service.method_count(); ++i) {
-        auto const* method = service.method(i);
-        auto method_full_name = method->full_name();
-        if (mixin_method_overrides.find(method_full_name) != mixin_method_overrides.end()) {
-            mixin_method_overrides.erase(method_full_name);
-        }
+std::unordered_map<std::string, MixinMethodOverride>
+GetDedupedMixinMethodOverrides(YAML::Node const& service_config,
+                               ServiceDescriptor const& service) {
+  auto mixin_method_overrides = GetMixinMethodOverrides(service_config);
+  for (int i = 0; i < service.method_count(); ++i) {
+    auto const* method = service.method(i);
+    auto method_full_name = method->full_name();
+    if (mixin_method_overrides.find(method_full_name) !=
+        mixin_method_overrides.end()) {
+      mixin_method_overrides.erase(method_full_name);
     }
-    return mixin_method_overrides;
+  }
+  return mixin_method_overrides;
 }
 
-} // namespace
+}  // namespace
 
 std::vector<std::string> GetMixinProtoPaths(YAML::Node const& service_config) {
-    std::vector<std::string> proto_paths;
-    if (service_config.Type() != YAML::NodeType::Map) return proto_paths;
-    auto const& apis = service_config["apis"];
-    if (apis.Type() != YAML::NodeType::Sequence) return proto_paths;
-    for (auto const& api : apis) {
-        if (api.Type() != YAML::NodeType::Map) continue;
-        auto const& name = api["name"];
-        if (name.Type() != YAML::NodeType::Scalar) continue;
-        std::string package_path = name.as<std::string>();
-        if (mixin_proto_path_map.find(package_path) == mixin_proto_path_map.end()) continue;
-        proto_paths.push_back(mixin_proto_path_map[package_path]);
-    }
-    return proto_paths;
+  std::vector<std::string> proto_paths;
+  if (service_config.Type() != YAML::NodeType::Map) return proto_paths;
+  auto const& apis = service_config["apis"];
+  if (apis.Type() != YAML::NodeType::Sequence) return proto_paths;
+  for (auto const& api : apis) {
+    if (api.Type() != YAML::NodeType::Map) continue;
+    auto const& name = api["name"];
+    if (name.Type() != YAML::NodeType::Scalar) continue;
+    std::string package_path = name.as<std::string>();
+    if (mixin_proto_path_map.find(package_path) == mixin_proto_path_map.end())
+      continue;
+    proto_paths.push_back(mixin_proto_path_map[package_path]);
+  }
+  return proto_paths;
 }
 
 std::vector<std::string> GetMixinProtoPaths(std::string& service_yaml_path) {
-    YAML::Node service_config = YAML::LoadFile(service_yaml_path);
-    return GetMixinProtoPaths(service_config);
+  YAML::Node service_config = YAML::LoadFile(service_yaml_path);
+  return GetMixinProtoPaths(service_config);
 }
 
-std::vector<MixinMethod> GetMixinMethods(
-    YAML::Node const& service_config, ServiceDescriptor const& service) {
-    std::vector<MixinMethod> mixin_methods;
-    DescriptorPool const* pool = service.file()->pool();
-    if (pool == nullptr) {
-        GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
-                     << " DescriptorPool doesn't exist for service: " << service.full_name();
-    }
-    auto mixin_proto_paths = GetMixinProtoPaths(service_config);
-    auto mixin_method_overrides = GetDedupedMixinMethodOverrides(service_config, service);
+std::vector<MixinMethod> GetMixinMethods(YAML::Node const& service_config,
+                                         ServiceDescriptor const& service) {
+  std::vector<MixinMethod> mixin_methods;
+  DescriptorPool const* pool = service.file()->pool();
+  if (pool == nullptr) {
+    GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
+                   << " DescriptorPool doesn't exist for service: "
+                   << service.full_name();
+  }
+  auto mixin_proto_paths = GetMixinProtoPaths(service_config);
+  auto mixin_method_overrides =
+      GetDedupedMixinMethodOverrides(service_config, service);
 
-    for (auto const& mixin_proto_path : mixin_proto_paths) {
-        FileDescriptor const* mixin_file = pool->FindFileByName(mixin_proto_path);
-        if (mixin_file == nullptr) {
-            GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
-                     << " Mixin FileDescriptor is not found for path: " << mixin_proto_path
+  for (auto const& mixin_proto_path : mixin_proto_paths) {
+    FileDescriptor const* mixin_file = pool->FindFileByName(mixin_proto_path);
+    if (mixin_file == nullptr) {
+      GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
+                     << " Mixin FileDescriptor is not found for path: "
+                     << mixin_proto_path
                      << " in service: " << service.full_name();
-        }
-        for (int i = 0; i < mixin_file->service_count(); ++i) {
-            ServiceDescriptor const* mixin_service = mixin_file->service(i);
-            for (int j = 0; j < mixin_service->method_count(); ++j) {
-                MethodDescriptor const* mixin_method = mixin_service->method(j);
-                auto mixin_method_full_name = mixin_method->full_name();
-                if (mixin_method_overrides.find(mixin_method_full_name) == mixin_method_overrides.end()) continue;
-                mixin_methods.push_back({*mixin_method, mixin_method_overrides[mixin_method_full_name]});
-            }
-        }
     }
-    return mixin_methods;
+    for (int i = 0; i < mixin_file->service_count(); ++i) {
+      ServiceDescriptor const* mixin_service = mixin_file->service(i);
+      for (int j = 0; j < mixin_service->method_count(); ++j) {
+        MethodDescriptor const* mixin_method = mixin_service->method(j);
+        auto mixin_method_full_name = mixin_method->full_name();
+        if (mixin_method_overrides.find(mixin_method_full_name) ==
+            mixin_method_overrides.end())
+          continue;
+        mixin_methods.push_back(
+            {*mixin_method, mixin_method_overrides[mixin_method_full_name]});
+      }
+    }
+  }
+  return mixin_methods;
 }
 
 }  // namespace generator_internal

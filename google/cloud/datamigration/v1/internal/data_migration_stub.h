@@ -25,6 +25,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/clouddms/v1/clouddms.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>

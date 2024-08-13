@@ -15,26 +15,25 @@
 #ifndef GOOGLE_CLOUD_CPP_GENERATOR_INTERNAL_MIXIN_UTILS_H
 #define GOOGLE_CLOUD_CPP_GENERATOR_INTERNAL_MIXIN_UTILS_H
 
+#include "absl/types/optional.h"
+#include <google/protobuf/compiler/code_generator.h>
+#include <yaml-cpp/yaml.h>
 #include <string>
 #include <vector>
-#include "absl/types/optional.h"
-#include <yaml-cpp/yaml.h>
-#include <google/protobuf/compiler/code_generator.h>
-
 
 namespace google {
 namespace cloud {
 namespace generator_internal {
 
 struct MixinMethodOverride {
-    std::string http_verb;
-    std::string http_path;
-    absl::optional<std::string> http_body;
+  std::string http_verb;
+  std::string http_path;
+  absl::optional<std::string> http_body;
 };
 
 struct MixinMethod {
-    std::reference_wrapper<google::protobuf::MethodDescriptor const> method;
-    MixinMethodOverride method_override;
+  std::reference_wrapper<google::protobuf::MethodDescriptor const> method;
+  MixinMethodOverride method_override;
 };
 
 std::vector<std::string> GetMixinProtoPaths(YAML::Node const& service_config);
@@ -42,7 +41,8 @@ std::vector<std::string> GetMixinProtoPaths(YAML::Node const& service_config);
 std::vector<std::string> GetMixinProtoPaths(std::string& service_yaml_path);
 
 std::vector<MixinMethod> GetMixinMethods(
-    YAML::Node const& service_config, google::protobuf::ServiceDescriptor const& service);
+    YAML::Node const& service_config,
+    google::protobuf::ServiceDescriptor const& service);
 
 }  // namespace generator_internal
 }  // namespace cloud

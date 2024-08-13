@@ -21,6 +21,7 @@
 #include "google/cloud/internal/absl_str_cat_quiet.h"
 #include "absl/strings/str_split.h"
 #include <google/protobuf/descriptor.h>
+#include <iostream>
 
 namespace google {
 namespace cloud {
@@ -73,6 +74,9 @@ Status StubGenerator::GenerateHeader() {
   std::vector<std::string> additional_pb_header_paths =
       absl::StrSplit(vars("additional_pb_header_paths"), absl::ByChar(','));
   HeaderSystemIncludes(additional_pb_header_paths);
+  std::vector<std::string> mixin_headers =
+      absl::StrSplit(vars("mixin_proto_grpc_header_paths"), ",");
+  HeaderSystemIncludes(mixin_headers);
   HeaderSystemIncludes(
       {vars("proto_grpc_header_path"),
        HasLongrunningMethod() ? "google/longrunning/operations.grpc.pb.h" : "",
