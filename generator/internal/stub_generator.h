@@ -51,6 +51,7 @@ class StubGenerator : public StubGeneratorBase {
  private:
   Status GenerateHeader() override;
   Status GenerateCc() override;
+  std::vector<MixinMethod> mixin_methods_;
 };
 
 }  // namespace generator_internal

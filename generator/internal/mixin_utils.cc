@@ -1,5 +1,7 @@
 #include "generator/internal/mixin_utils.h"
+#include "generator/internal/codegen_utils.h"
 #include "google/cloud/log.h"
+#include "absl/strings/ascii.h"
 #include "absl/types/optional.h"
 #include <google/protobuf/compiler/code_generator.h>
 #include <yaml-cpp/yaml.h>
@@ -133,7 +135,9 @@ std::vector<MixinMethod> GetMixinMethods(YAML::Node const& service_config,
             mixin_method_overrides.end())
           continue;
         mixin_methods.push_back(
-            {*mixin_method, mixin_method_overrides[mixin_method_full_name]});
+            {absl::AsciiStrToLower(mixin_service->name()) + "_stub",
+             ProtoNameToCppName(mixin_service->full_name()), *mixin_method,
+             mixin_method_overrides[mixin_method_full_name]});
       }
     }
   }

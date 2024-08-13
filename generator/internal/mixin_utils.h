@@ -32,6 +32,8 @@ struct MixinMethodOverride {
 };
 
 struct MixinMethod {
+  std::string grpc_stub_name;
+  std::string grpc_stub_fqn;
   std::reference_wrapper<google::protobuf::MethodDescriptor const> method;
   MixinMethodOverride method_override;
 };

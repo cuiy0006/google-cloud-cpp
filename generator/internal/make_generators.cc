@@ -69,6 +69,8 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
       absl::optional<std::string> body = mixin_method.method_override.http_body;
 
       std::cout << mixin_method.method.get().full_name() << " "
+                << mixin_method.grpc_stub_fqn << " "
+                << mixin_method.grpc_stub_name << " "
                 << mixin_method.method_override.http_verb << " "
                 << mixin_method.method_override.http_path << " "
                 << (body.has_value() ? *body : "") << std::endl;

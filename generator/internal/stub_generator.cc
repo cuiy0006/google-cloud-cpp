@@ -35,7 +35,8 @@ StubGenerator::StubGenerator(
     std::vector<MixinMethod> const& mixin_methods)
     : StubGeneratorBase("stub_header_path", "stub_cc_path", service_descriptor,
                         std::move(service_vars), std::move(service_method_vars),
-                        context, mixin_methods) {}
+                        context, mixin_methods),
+      mixin_methods_(mixin_methods) {}
 
 Status StubGenerator::GenerateHeader() {
   HeaderPrint(CopyrightLicenseFileHeader());
@@ -236,6 +237,10 @@ Status StubGenerator::GenerateHeader() {
     "\n"
     "class Default$stub_class_name$ : public $stub_class_name$ {\n"
     " public:");
+  // std::string mixin_stub = "";
+  // for (auto const& mixin_method : mixin_methods_) {
+  //   mixin_stub += ",\n        " + mixin_method.grpc_stub_name + "_(std::move"
+  // }
   if (HasLongrunningMethod()) {
     HeaderPrint(  // clang-format off
     "\n"
