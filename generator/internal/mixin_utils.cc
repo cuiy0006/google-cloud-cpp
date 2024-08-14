@@ -27,8 +27,10 @@ std::unordered_map<std::string, std::string> mixin_proto_path_map = {
     // {"google.longrunning.Operations", "google/longrunning/operations.proto"},
 };
 
-std::unordered_set<std::string> http_verbs = {"get", "post", "put", "patch",
-                                              "delete"};
+std::unordered_map<std::string, std::string> http_verbs = {
+    {"get", "Get"},     {"post", "Post"},     {"put", "Put"},
+    {"patch", "Patch"}, {"delete", "Delete"},
+};
 
 std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(
     YAML::Node const& service_config) {
@@ -51,8 +53,10 @@ std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(
           kv.second.Type() != YAML::NodeType::Scalar)
         continue;
 
-      std::string http_verb = kv.first.as<std::string>();
+      std::string http_verb = absl::AsciiStrToLower(kv.first.as<std::string>());
       if (http_verbs.find(http_verb) == http_verbs.end()) continue;
+      http_verb = http_verbs[http_verb];
+
       std::string http_path = kv.second.as<std::string>();
 
       absl::optional<std::string> http_body;

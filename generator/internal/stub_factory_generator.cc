@@ -31,7 +31,8 @@ StubFactoryGenerator::StubFactoryGenerator(
     : ServiceCodeGenerator("stub_factory_header_path", "stub_factory_cc_path",
                            service_descriptor, std::move(service_vars),
                            std::move(service_method_vars), context,
-                           mixin_methods) {}
+                           mixin_methods),
+      mixin_methods_(mixin_methods) {}
 
 Status StubFactoryGenerator::GenerateHeader() {
   HeaderPrint(CopyrightLicenseFileHeader());
@@ -96,6 +97,21 @@ Status StubFactoryGenerator::GenerateCc() {
   auto result = CcOpenNamespaces(NamespaceType::kInternal);
   if (!result.ok()) return result;
 
+  std::unordered_map<std::string, std::string> mixin_grpc_stubs;
+  for (auto const& mixin_method : mixin_methods_) {
+    mixin_grpc_stubs[mixin_method.grpc_stub_name] = mixin_method.grpc_stub_fqn;
+  }
+  std::string mixin_stub_inits = "";
+  std::string mixin_stub_moves = "";
+  for (auto const& mixin_grpc_stub : mixin_grpc_stubs) {
+    mixin_stub_inits += absl::StrFormat(
+        R"""(
+  auto service_%s = %s::NewStub(channel);)""",
+        mixin_grpc_stub.first, mixin_grpc_stub.second);
+    mixin_stub_moves +=
+        absl::StrFormat(", std::move(service_%s)", mixin_grpc_stub.first);
+  }
+
   // factory function implementation
   CcPrint(R"""(
 std::shared_ptr<$stub_class_name$>
@@ -106,18 +122,22 @@ CreateDefault$stub_class_name$(
     options.get<EndpointOption>(), internal::MakeChannelArguments(options));
   auto service_grpc_stub = $grpc_stub_fqn$::NewStub(channel);)""");
 
+  CcPrint(mixin_stub_inits);
+
   if (!HasLongrunningMethod()) {
-    CcPrint(R"""(
+    CcPrint(absl::StrFormat(R"""(
   std::shared_ptr<$stub_class_name$> stub =
-    std::make_shared<Default$stub_class_name$>(std::move(service_grpc_stub));
-)""");
+    std::make_shared<Default$stub_class_name$>(std::move(service_grpc_stub)%s);
+)""",
+                            mixin_stub_moves));
   } else {
-    CcPrint(R"""(
+    CcPrint(absl::StrFormat(R"""(
   std::shared_ptr<$stub_class_name$> stub =
     std::make_shared<Default$stub_class_name$>(
-      std::move(service_grpc_stub),
+      std::move(service_grpc_stub)%s,
       google::longrunning::Operations::NewStub(channel));
-)""");
+)""",
+                            mixin_stub_moves));
   }
   CcPrint(R"""(
   if (auth->RequiresConfigureContext()) {

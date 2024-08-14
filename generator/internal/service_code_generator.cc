@@ -481,8 +481,6 @@ void ServiceCodeGenerator::SetMethods() {
 
   for (auto const& mixin_method : mixin_methods_) {
     methods_.emplace_back(mixin_method.method.get());
-    std::cout << "-----------------------"
-              << mixin_method.method.get().full_name() << std::endl;
   }
 }
 

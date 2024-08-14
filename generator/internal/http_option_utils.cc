@@ -263,7 +263,8 @@ void SetHttpQueryParameters(HttpExtensionInfo const& info,
 }
 
 HttpExtensionInfo ParseHttpExtension(
-    google::protobuf::MethodDescriptor const& method) {
+    google::protobuf::MethodDescriptor const& method,
+    absl::optional<MixinMethodOverride> method_override) {
   if (!method.options().HasExtension(google::api::http)) return {};
 
   HttpExtensionInfo info;
@@ -271,30 +272,35 @@ HttpExtensionInfo ParseHttpExtension(
       method.options().GetExtension(google::api::http);
 
   std::string url_pattern;
-  switch (http_rule.pattern_case()) {
-    case google::api::HttpRule::kGet:
-      info.http_verb = "Get";
-      url_pattern = http_rule.get();
-      break;
-    case google::api::HttpRule::kPut:
-      info.http_verb = "Put";
-      url_pattern = http_rule.put();
-      break;
-    case google::api::HttpRule::kPost:
-      info.http_verb = "Post";
-      url_pattern = http_rule.post();
-      break;
-    case google::api::HttpRule::kDelete:
-      info.http_verb = "Delete";
-      url_pattern = http_rule.delete_();
-      break;
-    case google::api::HttpRule::kPatch:
-      info.http_verb = "Patch";
-      url_pattern = http_rule.patch();
-      break;
-    default:
-      GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
-                     << ": google::api::HttpRule not handled";
+  if (method_override) {
+    url_pattern = method_override->http_path;
+    info.http_verb = method_override->http_verb;
+  } else {
+    switch (http_rule.pattern_case()) {
+      case google::api::HttpRule::kGet:
+        info.http_verb = "Get";
+        url_pattern = http_rule.get();
+        break;
+      case google::api::HttpRule::kPut:
+        info.http_verb = "Put";
+        url_pattern = http_rule.put();
+        break;
+      case google::api::HttpRule::kPost:
+        info.http_verb = "Post";
+        url_pattern = http_rule.post();
+        break;
+      case google::api::HttpRule::kDelete:
+        info.http_verb = "Delete";
+        url_pattern = http_rule.delete_();
+        break;
+      case google::api::HttpRule::kPatch:
+        info.http_verb = "Patch";
+        url_pattern = http_rule.patch();
+        break;
+      default:
+        GCP_LOG(FATAL) << __FILE__ << ":" << __LINE__
+                       << ": google::api::HttpRule not handled";
+    }
   }
 
   auto parsed_http_rule = ParsePathTemplate(url_pattern);
