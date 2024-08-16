@@ -1018,6 +1018,33 @@ DataMigrationServiceTracingConnection::GetLocation(
   return internal::EndSpan(*span, child_->GetLocation(request));
 }
 
+StatusOr<google::iam::v1::Policy>
+DataMigrationServiceTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "datamigration_v1::DataMigrationServiceConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+DataMigrationServiceTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "datamigration_v1::DataMigrationServiceConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+DataMigrationServiceTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpan(
+      "datamigration_v1::DataMigrationServiceConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<datamigration_v1::DataMigrationServiceConnection>

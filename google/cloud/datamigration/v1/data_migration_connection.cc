@@ -718,6 +718,22 @@ DataMigrationServiceConnection::GetLocation(
   return Status(StatusCode::kUnimplemented, "not implemented");
 }
 
+StatusOr<google::iam::v1::Policy> DataMigrationServiceConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy> DataMigrationServiceConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+DataMigrationServiceConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<DataMigrationServiceConnection>
 MakeDataMigrationServiceConnection(Options options) {
   internal::CheckExpectedOptions<CommonOptionList, GrpcOptionList,

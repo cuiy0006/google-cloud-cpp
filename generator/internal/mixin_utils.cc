@@ -23,7 +23,7 @@ namespace {
 std::unordered_map<std::string, std::string> mixin_proto_path_map = {
     {"google.cloud.location.Locations",
      "google/cloud/location/locations.proto"},
-    // {"google.iam.v1.IAMPolicy", "google/iam/v1/iam_policy.proto"},
+    {"google.iam.v1.IAMPolicy", "google/iam/v1/iam_policy.proto"},
     // {"google.longrunning.Operations", "google/longrunning/operations.proto"},
 };
 

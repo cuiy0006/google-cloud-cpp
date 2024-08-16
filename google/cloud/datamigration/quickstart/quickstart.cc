@@ -29,14 +29,17 @@ int main(int argc, char* argv[]) try {
   auto client = datamigration::DataMigrationServiceClient(
       datamigration::MakeDataMigrationServiceConnection());
 
-
-  std::cout << "------------------------TEST ListMigrationJobs------------------------" << std::endl;
+  std::cout << "------------------------TEST "
+               "ListMigrationJobs------------------------"
+            << std::endl;
   for (auto mj : client.ListMigrationJobs(location.FullName())) {
     if (!mj) throw std::move(mj).status();
     std::cout << mj->DebugString() << "\n";
   }
 
-  std::cout << "------------------------TEST ListLocations------------------------" << std::endl;
+  std::cout
+      << "------------------------TEST ListLocations------------------------"
+      << std::endl;
   google::cloud::location::ListLocationsRequest ll_req;
   *ll_req.mutable_name() = "projects/" + std::string(argv[1]);
   std::cout << "ListLocationsRequest name = " << ll_req.name() << "\n";
@@ -45,10 +48,14 @@ int main(int argc, char* argv[]) try {
     std::cout << l->DebugString() << "\n";
   }
 
-  std::cout << "------------------------TEST GetLocation------------------------" << std::endl;
+  std::cout
+      << "------------------------TEST GetLocation------------------------"
+      << std::endl;
   google::cloud::location::GetLocationRequest gl_req;
-  *gl_req.mutable_name() = "projects/" + std::string(argv[1]) + "/locations/" + argv[2];
-  google::cloud::StatusOr<google::cloud::location::Location> gl_res = client.GetLocation(gl_req);
+  *gl_req.mutable_name() =
+      "projects/" + std::string(argv[1]) + "/locations/" + argv[2];
+  google::cloud::StatusOr<google::cloud::location::Location> gl_res =
+      client.GetLocation(gl_req);
   if (!gl_res) throw std::move(gl_res).status();
   std::cout << gl_res->DebugString() << "\n";
 

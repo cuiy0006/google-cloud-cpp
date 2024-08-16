@@ -19,6 +19,7 @@
 #include "generator/internal/pagination.h"
 #include "generator/internal/predicate_utils.h"
 #include "generator/internal/printer.h"
+#include "absl/strings/str_split.h"
 #include <google/protobuf/descriptor.h>
 
 namespace google {
@@ -70,11 +71,14 @@ Status ConnectionGenerator::GenerateHeader() {
            : "",
        IsExperimental() ? "google/cloud/experimental_tag.h" : "",
        "google/cloud/version.h"});
-  HeaderSystemIncludes(
-      {vars("proto_header_path"), vars("additional_pb_header_paths"),
-       HasGRPCLongrunningOperation() ? "google/longrunning/operations.grpc.pb.h"
-                                     : "",
-       "memory"});
+  std::vector<std::string> const additional_pb_header_paths =
+      absl::StrSplit(vars("additional_pb_header_paths"), absl::ByChar(','));
+  HeaderSystemIncludes(additional_pb_header_paths);
+  HeaderSystemIncludes({vars("proto_header_path"),
+                        HasGRPCLongrunningOperation()
+                            ? "google/longrunning/operations.grpc.pb.h"
+                            : "",
+                        "memory"});
   switch (endpoint_location_style) {
     case ServiceConfiguration::LOCATION_DEPENDENT:
     case ServiceConfiguration::LOCATION_DEPENDENT_COMPAT:
