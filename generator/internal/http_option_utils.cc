@@ -264,6 +264,7 @@ void SetHttpQueryParameters(HttpExtensionInfo const& info,
 
 HttpExtensionInfo ParseHttpExtension(
     google::protobuf::MethodDescriptor const& method,
+    google::protobuf::ServiceDescriptor const& service,
     absl::optional<MixinMethodOverride> method_override) {
   if (!method.options().HasExtension(google::api::http)) return {};
 
@@ -329,7 +330,9 @@ HttpExtensionInfo ParseHttpExtension(
   };
 
   auto api_version_opt = FormatApiVersionFromUrlPattern(url_pattern);
-  auto api_version = api_version_opt.has_value() ? *api_version_opt : FormatApiVersionFromPackageName(method);
+  auto api_version = api_version_opt.has_value()
+                         ? *api_version_opt
+                         : FormatApiVersionFromPackageName(service);
 
   auto rest_path_visitor = RestPathVisitor(api_version, info.rest_path);
   for (auto const& s : parsed_http_rule->segments) {
@@ -351,7 +354,7 @@ HttpExtensionInfo ParseHttpExtension(
 }
 
 bool HasHttpRoutingHeader(MethodDescriptor const& method) {
-  auto result = ParseHttpExtension(method);
+  auto result = ParseHttpExtension(method, *method.service());
   return !result.field_substitutions.empty();
 }
 
@@ -401,9 +404,21 @@ std::string FormatApiVersionFromPackageName(
   return {};  // Suppress clang-tidy warnings
 }
 
+std::string FormatApiVersionFromPackageName(
+    google::protobuf::ServiceDescriptor const& service) {
+  std::vector<std::string> parts =
+      absl::StrSplit(service.file()->package(), '.');
+  if (absl::StartsWith(parts.back(), "v")) return parts.back();
+  GCP_LOG(FATAL) << "Unrecognized API version in file: "
+                 << service.file()->name()
+                 << ", package: " << service.file()->package();
+  return {};  // Suppress clang-tidy warnings
+}
+
 // Generate api version by extracting the version from the url pattern.
 // In some cases(i.e. location), there is no version in the package name.
-absl::optional<std::string> FormatApiVersionFromUrlPattern(std::string const& url_pattern) {
+absl::optional<std::string> FormatApiVersionFromUrlPattern(
+    std::string const& url_pattern) {
   std::vector<std::string> parts = absl::StrSplit(url_pattern, '/');
   static auto const* const kVersion = new std::regex{R"(v\d+)"};
   for (auto const& part : parts) {

@@ -44,6 +44,7 @@ struct HttpExtensionInfo {
  */
 HttpExtensionInfo ParseHttpExtension(
     google::protobuf::MethodDescriptor const& method,
+    google::protobuf::ServiceDescriptor const& service,
     absl::optional<MixinMethodOverride> method_override = absl::nullopt);
 
 /**
@@ -115,10 +116,14 @@ std::string FormatRequestResource(google::protobuf::Descriptor const& request,
 std::string FormatApiVersionFromPackageName(
     google::protobuf::MethodDescriptor const& method);
 
+std::string FormatApiVersionFromPackageName(
+    google::protobuf::ServiceDescriptor const& service);
+
 /**
  * Parses the url pattern of the method and returns its API version.
  */
-absl::optional<std::string> FormatApiVersionFromUrlPattern(std::string const& url_pattern);
+absl::optional<std::string> FormatApiVersionFromUrlPattern(
+    std::string const& url_pattern);
 
 }  // namespace generator_internal
 }  // namespace cloud

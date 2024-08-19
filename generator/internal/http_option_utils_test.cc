@@ -36,8 +36,8 @@ using ::testing::ElementsAre;
 using ::testing::Eq;
 using ::testing::HasSubstr;
 using ::testing::IsEmpty;
-using ::testing::Pair;
 using ::testing::Optional;
+using ::testing::Pair;
 
 char const* const kHttpProto =
     "syntax = \"proto3\";\n"
@@ -435,7 +435,7 @@ TEST_F(HttpOptionUtilsTest, ParseHttpExtensionWithPrefixAndSuffix) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(2);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path,
               Eq("/v1/{parent=projects/*/instances/*}/databases"));
   EXPECT_THAT(info.field_substitutions,
@@ -450,7 +450,7 @@ TEST_F(HttpOptionUtilsTest,
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(6);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path, Eq("/v1/projects/{project}/databases"));
   EXPECT_THAT(info.field_substitutions,
               ElementsAre(Pair("project", "project")));
@@ -464,7 +464,7 @@ TEST_F(HttpOptionUtilsTest,
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(7);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path,
               Eq("/v1/projects/{project}/instances/{instance}/databases"));
   EXPECT_THAT(
@@ -479,7 +479,7 @@ TEST_F(HttpOptionUtilsTest, ParseHttpExtensionWithOnlyPrefix) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(1);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path, Eq("/v1/{name=projects/*/instances/*/backups/*}"));
   EXPECT_THAT(info.field_substitutions,
               ElementsAre(Pair("name", "projects/*/instances/*/backups/*")));
@@ -492,7 +492,7 @@ TEST_F(HttpOptionUtilsTest, ParseHttpExtensionSimple) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(3);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path, Eq("/v1/foo"));
   EXPECT_THAT(info.field_substitutions, IsEmpty());
   EXPECT_THAT(info.body, Eq(""));
@@ -505,7 +505,7 @@ TEST_F(HttpOptionUtilsTest,
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(5);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   EXPECT_THAT(info.url_path,
               Eq("/v1/projects/{project=project}/instances/{instance=instance}/"
                  "databases"));
@@ -519,7 +519,8 @@ TEST_F(HttpOptionUtilsTest, SetHttpDerivedMethodVarsSimpleInfo) {
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(0);
   VarsDictionary vars;
-  SetHttpDerivedMethodVars(ParseHttpExtension(*method), *method, vars);
+  SetHttpDerivedMethodVars(ParseHttpExtension(*method, *method->service()),
+                           *method, vars);
   EXPECT_THAT(vars.at("method_http_verb"), Eq("Delete"));
   EXPECT_THAT(
       vars.at("method_rest_path"),
@@ -535,7 +536,8 @@ TEST_F(HttpOptionUtilsTest, SetHttpDerivedMethodVarsExtensionInfoSingleParam) {
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(2);
   VarsDictionary vars;
-  SetHttpDerivedMethodVars(ParseHttpExtension(*method), *method, vars);
+  SetHttpDerivedMethodVars(ParseHttpExtension(*method, *method->service()),
+                           *method, vars);
   EXPECT_THAT(vars.at("method_request_params"),
               Eq("\"parent=\", internal::UrlEncode(request.parent())"));
   EXPECT_THAT(vars.at("method_request_body"), Eq("*"));
@@ -555,7 +557,8 @@ TEST_F(HttpOptionUtilsTest,
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(7);
   VarsDictionary vars;
-  SetHttpDerivedMethodVars(ParseHttpExtension(*method), *method, vars);
+  SetHttpDerivedMethodVars(ParseHttpExtension(*method, *method->service()),
+                           *method, vars);
   EXPECT_THAT(vars.at("method_request_params"),
               Eq("\"project=\", internal::UrlEncode(request.project()), "
                  "\"&\",\"instance=\", "
@@ -577,7 +580,8 @@ TEST_F(HttpOptionUtilsTest,
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(5);
   VarsDictionary vars;
-  SetHttpDerivedMethodVars(ParseHttpExtension(*method), *method, vars);
+  SetHttpDerivedMethodVars(ParseHttpExtension(*method, *method->service()),
+                           *method, vars);
   EXPECT_THAT(vars.at("method_request_body"), Eq("*"));
   EXPECT_THAT(vars.at("method_http_verb"), Eq("Post"));
   EXPECT_THAT(
@@ -594,7 +598,8 @@ TEST_F(HttpOptionUtilsTest, SetHttpQueryParametersNoParams) {
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(5);
   VarsDictionary vars;
-  SetHttpQueryParameters(ParseHttpExtension(*method), *method, vars);
+  SetHttpQueryParameters(ParseHttpExtension(*method, *method->service()),
+                         *method, vars);
   EXPECT_THAT(vars.at("method_http_query_parameters"), Eq(""));
 }
 
@@ -604,7 +609,8 @@ TEST_F(HttpOptionUtilsTest, SetHttpQueryParametersGetWithParams) {
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(4);
   VarsDictionary vars;
-  SetHttpQueryParameters(ParseHttpExtension(*method), *method, vars);
+  SetHttpQueryParameters(ParseHttpExtension(*method, *method->service()),
+                         *method, vars);
   EXPECT_THAT(vars.at("method_http_query_parameters"), Eq(""));
 }
 
@@ -614,7 +620,8 @@ TEST_F(HttpOptionUtilsTest, SetHttpGetQueryParametersGetPaginated) {
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(3);
   VarsDictionary vars;
-  SetHttpQueryParameters(ParseHttpExtension(*method), *method, vars);
+  SetHttpQueryParameters(ParseHttpExtension(*method, *method->service()),
+                         *method, vars);
   EXPECT_THAT(vars,
               Contains(Pair("method_http_query_parameters",
                             AllOf(HasSubstr("TrimEmptyQueryParameters"),
@@ -629,7 +636,8 @@ TEST_F(HttpOptionUtilsTest,
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(0);
   VarsDictionary vars;
-  SetHttpQueryParameters(ParseHttpExtension(*method), *method, vars);
+  SetHttpQueryParameters(ParseHttpExtension(*method, *method->service()),
+                         *method, vars);
   EXPECT_THAT(
       vars,
       Contains(Pair(
@@ -729,7 +737,7 @@ TEST_F(HttpOptionUtilsTest, FormatRequestResourceWholeMessage) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(2);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   auto result = FormatRequestResource(*method->input_type(), info);
   EXPECT_THAT(result, Eq("request"));
 }
@@ -739,7 +747,7 @@ TEST_F(HttpOptionUtilsTest, FormatRequestResourceMessageField) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(6);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   auto result = FormatRequestResource(*method->input_type(), info);
   EXPECT_THAT(result, Eq("request.body()"));
 }
@@ -749,7 +757,7 @@ TEST_F(HttpOptionUtilsTest, FormatRequestResourceAnnotatedRequestField) {
       pool_.FindFileByName("google/foo/v1/service.proto");
   MethodDescriptor const* method =
       service_file_descriptor->service(0)->method(8);
-  auto info = ParseHttpExtension(*method);
+  auto info = ParseHttpExtension(*method, *method->service());
   auto result = FormatRequestResource(*method->input_type(), info);
   EXPECT_THAT(result, Eq("request.namespace_()"));
 }
@@ -784,8 +792,7 @@ TEST_F(HttpOptionUtilsTest, FormatApiVersionFromUrlPattern) {
 
 TEST_F(HttpOptionUtilsTest, FormatApiVersionFromUrlPatternNullOptional) {
   std::string url_pattern = "/foo/bar";
-  EXPECT_THAT(FormatApiVersionFromUrlPattern(url_pattern),
-              Eq(absl::nullopt));
+  EXPECT_THAT(FormatApiVersionFromUrlPattern(url_pattern), Eq(absl::nullopt));
 }
 
 }  // namespace

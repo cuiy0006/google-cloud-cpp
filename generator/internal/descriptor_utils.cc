@@ -855,7 +855,7 @@ std::map<std::string, VarsDictionary> CreateMethodVars(
     SetLongrunningOperationMethodVars(method, method_vars);
     AssignPaginationMethodVars(method, method_vars);
     SetMethodSignatureMethodVars(service, method, omitted_rpcs, method_vars);
-    auto parsed_http_info = ParseHttpExtension(method);
+    auto parsed_http_info = ParseHttpExtension(method, service);
     method_vars["request_resource"] =
         FormatRequestResource(*method.input_type(), parsed_http_info);
     SetHttpDerivedMethodVars(parsed_http_info, method, method_vars);
@@ -889,7 +889,8 @@ std::map<std::string, VarsDictionary> CreateMethodVars(
     SetLongrunningOperationMethodVars(method, method_vars);
     AssignPaginationMethodVars(method, method_vars);
     SetMethodSignatureMethodVars(service, method, omitted_rpcs, method_vars);
-    auto parsed_http_info = ParseHttpExtension(method, mixin_method.method_override);
+    auto parsed_http_info =
+        ParseHttpExtension(method, service, mixin_method.method_override);
     method_vars["request_resource"] =
         FormatRequestResource(*method.input_type(), parsed_http_info);
     SetHttpDerivedMethodVars(parsed_http_info, method, method_vars);
