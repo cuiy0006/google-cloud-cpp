@@ -159,6 +159,16 @@ Idempotency DatastreamConnectionIdempotencyPolicy::DeleteRoute(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency DatastreamConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DatastreamConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DatastreamConnectionIdempotencyPolicy>
 MakeDefaultDatastreamConnectionIdempotencyPolicy() {
   return std::make_unique<DatastreamConnectionIdempotencyPolicy>();

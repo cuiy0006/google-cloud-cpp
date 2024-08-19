@@ -144,6 +144,12 @@ class CloudRedisConnectionImpl : public redis_v1::CloudRedisConnection {
   future<StatusOr<google::cloud::redis::v1::Instance>> RescheduleMaintenance(
       google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<redis_v1_internal::CloudRedisStub> stub_;

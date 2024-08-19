@@ -550,6 +550,37 @@ EventarcClient::UpdateGoogleChannelConfig(
   return connection_->UpdateGoogleChannelConfig(request);
 }
 
+StreamRange<google::cloud::location::Location> EventarcClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location> EventarcClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
+StatusOr<google::iam::v1::Policy> EventarcClient::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->SetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::Policy> EventarcClient::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+EventarcClient::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->TestIamPermissions(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace eventarc_v1
 }  // namespace cloud

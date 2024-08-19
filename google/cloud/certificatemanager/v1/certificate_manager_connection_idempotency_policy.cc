@@ -206,6 +206,16 @@ Idempotency CertificateManagerConnectionIdempotencyPolicy::DeleteTrustConfig(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency CertificateManagerConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency CertificateManagerConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<CertificateManagerConnectionIdempotencyPolicy>
 MakeDefaultCertificateManagerConnectionIdempotencyPolicy() {
   return std::make_unique<CertificateManagerConnectionIdempotencyPolicy>();

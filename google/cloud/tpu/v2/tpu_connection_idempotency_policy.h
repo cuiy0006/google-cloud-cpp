@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/tpu/v2/cloud_tpu.grpc.pb.h>
 #include <memory>
 
@@ -74,6 +75,12 @@ class TpuConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency GetGuestAttributes(
       google::cloud::tpu::v2::GetGuestAttributesRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<TpuConnectionIdempotencyPolicy>

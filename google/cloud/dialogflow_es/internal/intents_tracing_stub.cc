@@ -141,6 +141,29 @@ StatusOr<google::longrunning::Operation> IntentsTracingStub::BatchDeleteIntents(
       context, *span, child_->BatchDeleteIntents(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+IntentsTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.dialogflow.v2.Intents",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> IntentsTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.dialogflow.v2.Intents",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 IntentsTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

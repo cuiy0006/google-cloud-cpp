@@ -382,6 +382,53 @@ DataTaxonomyServiceTracingConnection::GetDataAttribute(
   return internal::EndSpan(*span, child_->GetDataAttribute(request));
 }
 
+StreamRange<google::cloud::location::Location>
+DataTaxonomyServiceTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "dataplex_v1::DataTaxonomyServiceConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+DataTaxonomyServiceTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "dataplex_v1::DataTaxonomyServiceConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+DataTaxonomyServiceTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "dataplex_v1::DataTaxonomyServiceConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+DataTaxonomyServiceTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "dataplex_v1::DataTaxonomyServiceConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+DataTaxonomyServiceTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpan(
+      "dataplex_v1::DataTaxonomyServiceConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<dataplex_v1::DataTaxonomyServiceConnection>

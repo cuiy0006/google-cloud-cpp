@@ -18,6 +18,7 @@
 
 #include "google/cloud/aiplatform/v1/internal/feature_online_store_tracing_connection.h"
 #include "google/cloud/internal/opentelemetry.h"
+#include "google/cloud/internal/traced_stream_range.h"
 #include <memory>
 #include <utility>
 
@@ -52,6 +53,53 @@ FeatureOnlineStoreServiceTracingConnection::SearchNearestEntities(
       "SearchNearestEntities");
   auto scope = opentelemetry::trace::Scope(span);
   return internal::EndSpan(*span, child_->SearchNearestEntities(request));
+}
+
+StreamRange<google::cloud::location::Location>
+FeatureOnlineStoreServiceTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::FeatureOnlineStoreServiceConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+FeatureOnlineStoreServiceTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::FeatureOnlineStoreServiceConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+FeatureOnlineStoreServiceTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::FeatureOnlineStoreServiceConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+FeatureOnlineStoreServiceTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::FeatureOnlineStoreServiceConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+FeatureOnlineStoreServiceTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::FeatureOnlineStoreServiceConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
 }
 
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY

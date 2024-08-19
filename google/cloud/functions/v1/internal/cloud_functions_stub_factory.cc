@@ -29,6 +29,7 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/functions/v1/functions.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -45,9 +46,11 @@ CreateDefaultCloudFunctionsServiceStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::functions::v1::CloudFunctionsService::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<CloudFunctionsServiceStub> stub =
       std::make_shared<DefaultCloudFunctionsServiceStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

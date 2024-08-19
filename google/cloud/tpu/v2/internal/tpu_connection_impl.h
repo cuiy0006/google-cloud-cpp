@@ -128,6 +128,12 @@ class TpuConnectionImpl : public tpu_v2::TpuConnection {
   GetGuestAttributes(google::cloud::tpu::v2::GetGuestAttributesRequest const&
                          request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<tpu_v2_internal::TpuStub> stub_;

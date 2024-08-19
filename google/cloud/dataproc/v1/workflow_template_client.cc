@@ -235,6 +235,25 @@ Status WorkflowTemplateServiceClient::DeleteWorkflowTemplate(
   return connection_->DeleteWorkflowTemplate(request);
 }
 
+StatusOr<google::iam::v1::Policy> WorkflowTemplateServiceClient::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->SetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::Policy> WorkflowTemplateServiceClient::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+WorkflowTemplateServiceClient::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->TestIamPermissions(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace dataproc_v1
 }  // namespace cloud

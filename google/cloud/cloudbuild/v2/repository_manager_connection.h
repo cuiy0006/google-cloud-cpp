@@ -30,8 +30,10 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/devtools/cloudbuild/v2/cloudbuild.pb.h>
 #include <google/devtools/cloudbuild/v2/repositories.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 
@@ -290,6 +292,15 @@ class RepositoryManagerConnection {
   virtual StatusOr<google::devtools::cloudbuild::v2::FetchGitRefsResponse>
   FetchGitRefs(
       google::devtools::cloudbuild::v2::FetchGitRefsRequest const& request);
+
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 /**

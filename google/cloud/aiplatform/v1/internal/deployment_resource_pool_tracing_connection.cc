@@ -167,6 +167,54 @@ DeploymentResourcePoolServiceTracingConnection::DeleteDeploymentResourcePool(
                            child_->DeleteDeploymentResourcePool(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+DeploymentResourcePoolServiceTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::DeploymentResourcePoolServiceConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+DeploymentResourcePoolServiceTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::DeploymentResourcePoolServiceConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+DeploymentResourcePoolServiceTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::DeploymentResourcePoolServiceConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy>
+DeploymentResourcePoolServiceTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::DeploymentResourcePoolServiceConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+DeploymentResourcePoolServiceTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpan(
+      "aiplatform_v1::DeploymentResourcePoolServiceConnection::"
+      "TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<aiplatform_v1::DeploymentResourcePoolServiceConnection>

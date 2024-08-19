@@ -29,6 +29,8 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/aiplatform/v1/feature_registry_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -45,9 +47,13 @@ CreateDefaultFeatureRegistryServiceStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::aiplatform::v1::FeatureRegistryService::NewStub(channel);
+  auto service_iampolicy_stub = google::iam::v1::IAMPolicy::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<FeatureRegistryServiceStub> stub =
       std::make_shared<DefaultFeatureRegistryServiceStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_iampolicy_stub),
+          std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

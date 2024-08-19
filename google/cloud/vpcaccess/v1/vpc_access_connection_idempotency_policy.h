@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/vpcaccess/v1/vpc_access.grpc.pb.h>
 #include <memory>
 
@@ -48,6 +49,9 @@ class VpcAccessServiceConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency DeleteConnector(
       google::cloud::vpcaccess::v1::DeleteConnectorRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
 };
 
 std::unique_ptr<VpcAccessServiceConnectionIdempotencyPolicy>

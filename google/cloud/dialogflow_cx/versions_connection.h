@@ -31,6 +31,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/cx/v3/version.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <google/protobuf/struct.pb.h>
 #include <memory>
@@ -221,6 +222,12 @@ class VersionsConnection {
   virtual StatusOr<google::cloud::dialogflow::cx::v3::CompareVersionsResponse>
   CompareVersions(
       google::cloud::dialogflow::cx::v3::CompareVersionsRequest const& request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

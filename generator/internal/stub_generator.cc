@@ -249,9 +249,9 @@ Status StubGenerator::GenerateHeader() {
   std::string mixin_stub_members = "";
   for (auto const& mixin_grpc_stub : mixin_grpc_stubs) {
     mixin_stub_inputs += absl::StrFormat(
-      " std::unique_ptr<%s::StubInterface> %s,", mixin_grpc_stub.second, mixin_grpc_stub.first);
+      ", std::unique_ptr<%s::StubInterface> %s", mixin_grpc_stub.second, mixin_grpc_stub.first);
     mixin_stub_members_init += absl::StrFormat(
-      " %s_(std::move(%s)),", mixin_grpc_stub.first, mixin_grpc_stub.first);
+      ", %s_(std::move(%s))", mixin_grpc_stub.first, mixin_grpc_stub.first);
     mixin_stub_members += absl::StrFormat(
       "std::unique_ptr<%s::StubInterface> %s_;\n", mixin_grpc_stub.second, mixin_grpc_stub.first);
   }
@@ -260,22 +260,26 @@ Status StubGenerator::GenerateHeader() {
     HeaderPrint(
     absl::StrCat(R"""(
   Default$stub_class_name$(
-      std::unique_ptr<$grpc_stub_fqn$::StubInterface> grpc_stub,)"""
+      std::unique_ptr<$grpc_stub_fqn$::StubInterface> grpc_stub)"""
       , mixin_stub_inputs,
       R"""(
-      std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
-      : grpc_stub_(std::move(grpc_stub)),)"""
+      ,std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
+      : grpc_stub_(std::move(grpc_stub)))"""
       , mixin_stub_members_init,
       R"""(
-        operations_(std::move(operations)) {}
+        , operations_(std::move(operations)) {}
 )"""));
   } else {
     HeaderPrint(
-    R"""(
+    absl::StrCat(R"""(
   explicit Default$stub_class_name$(
-      std::unique_ptr<$grpc_stub_fqn$::StubInterface> grpc_stub)
-      : grpc_stub_(std::move(grpc_stub)) {}
-)""");
+      std::unique_ptr<$grpc_stub_fqn$::StubInterface> grpc_stub)"""
+      , mixin_stub_inputs,
+      R"""()
+      : grpc_stub_(std::move(grpc_stub)))"""
+      , mixin_stub_members_init,
+      R"""({}
+)"""));
   }
 
   HeaderPrintPublicMethods();

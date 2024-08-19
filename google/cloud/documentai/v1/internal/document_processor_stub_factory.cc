@@ -29,6 +29,7 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/documentai/v1/document_processor_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -45,9 +46,11 @@ CreateDefaultDocumentProcessorServiceStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::documentai::v1::DocumentProcessorService::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<DocumentProcessorServiceStub> stub =
       std::make_shared<DefaultDocumentProcessorServiceStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

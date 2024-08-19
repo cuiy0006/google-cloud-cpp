@@ -592,6 +592,20 @@ CloudFilestoreManagerClient::UpdateBackup(
   return connection_->UpdateBackup(operation);
 }
 
+StreamRange<google::cloud::location::Location>
+CloudFilestoreManagerClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location>
+CloudFilestoreManagerClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace filestore_v1
 }  // namespace cloud

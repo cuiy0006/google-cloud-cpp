@@ -26,6 +26,10 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/aiplatform/v1/prediction_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <memory>
 #include <utility>
 
@@ -115,6 +119,28 @@ class PredictionServiceStub {
   StreamGenerateContent(
       std::shared_ptr<grpc::ClientContext> context, Options const& options,
       google::cloud::aiplatform::v1::GenerateContentRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::ListLocationsResponse>
+  ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) = 0;
 };
 
 class DefaultPredictionServiceStub : public PredictionServiceStub {
@@ -122,8 +148,13 @@ class DefaultPredictionServiceStub : public PredictionServiceStub {
   explicit DefaultPredictionServiceStub(
       std::unique_ptr<
           google::cloud::aiplatform::v1::PredictionService::StubInterface>
-          grpc_stub)
-      : grpc_stub_(std::move(grpc_stub)) {}
+          grpc_stub,
+      std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub,
+      std::unique_ptr<google::cloud::location::Locations::StubInterface>
+          locations_stub)
+      : grpc_stub_(std::move(grpc_stub)),
+        iampolicy_stub_(std::move(iampolicy_stub)),
+        locations_stub_(std::move(locations_stub)) {}
 
   StatusOr<google::cloud::aiplatform::v1::PredictResponse> Predict(
       grpc::ClientContext& context, Options const& options,
@@ -205,10 +236,33 @@ class DefaultPredictionServiceStub : public PredictionServiceStub {
       google::cloud::aiplatform::v1::GenerateContentRequest const& request)
       override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) override;
+
  private:
   std::unique_ptr<
       google::cloud::aiplatform::v1::PredictionService::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub_;
+  std::unique_ptr<google::cloud::location::Locations::StubInterface>
+      locations_stub_;
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

@@ -646,6 +646,30 @@ Status AlloyDBAdminTracingStub::DeleteUser(
                            child_->DeleteUser(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+AlloyDBAdminTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.alloydb.v1.AlloyDBAdmin",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+AlloyDBAdminTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.alloydb.v1.AlloyDBAdmin",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 AlloyDBAdminTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

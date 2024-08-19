@@ -103,6 +103,40 @@ Status AutoscalingPolicyServiceLogging::DeleteAutoscalingPolicy(
       context, options, request, __func__, tracing_options_);
 }
 
+StatusOr<google::iam::v1::Policy> AutoscalingPolicyServiceLogging::SetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return google::cloud::internal::LogWrapper(
+      [this](grpc::ClientContext& context, Options const& options,
+             google::iam::v1::SetIamPolicyRequest const& request) {
+        return child_->SetIamPolicy(context, options, request);
+      },
+      context, options, request, __func__, tracing_options_);
+}
+
+StatusOr<google::iam::v1::Policy> AutoscalingPolicyServiceLogging::GetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  return google::cloud::internal::LogWrapper(
+      [this](grpc::ClientContext& context, Options const& options,
+             google::iam::v1::GetIamPolicyRequest const& request) {
+        return child_->GetIamPolicy(context, options, request);
+      },
+      context, options, request, __func__, tracing_options_);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+AutoscalingPolicyServiceLogging::TestIamPermissions(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  return google::cloud::internal::LogWrapper(
+      [this](grpc::ClientContext& context, Options const& options,
+             google::iam::v1::TestIamPermissionsRequest const& request) {
+        return child_->TestIamPermissions(context, options, request);
+      },
+      context, options, request, __func__, tracing_options_);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace dataproc_v1_internal
 }  // namespace cloud

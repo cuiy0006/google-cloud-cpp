@@ -93,6 +93,11 @@ CloudFunctionsServiceConnectionIdempotencyPolicy::TestIamPermissions(
   return Idempotency::kIdempotent;
 }
 
+Idempotency CloudFunctionsServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<CloudFunctionsServiceConnectionIdempotencyPolicy>
 MakeDefaultCloudFunctionsServiceConnectionIdempotencyPolicy() {
   return std::make_unique<CloudFunctionsServiceConnectionIdempotencyPolicy>();

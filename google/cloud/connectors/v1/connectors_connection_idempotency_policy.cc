@@ -121,6 +121,32 @@ Idempotency ConnectorsConnectionIdempotencyPolicy::GetGlobalSettings(
   return Idempotency::kIdempotent;
 }
 
+Idempotency ConnectorsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ConnectorsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ConnectorsConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency ConnectorsConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ConnectorsConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ConnectorsConnectionIdempotencyPolicy>
 MakeDefaultConnectorsConnectionIdempotencyPolicy() {
   return std::make_unique<ConnectorsConnectionIdempotencyPolicy>();

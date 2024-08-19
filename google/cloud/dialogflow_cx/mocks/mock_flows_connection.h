@@ -199,6 +199,14 @@ class MockFlowsConnection : public dialogflow_cx::FlowsConnection {
       future<StatusOr<google::cloud::dialogflow::cx::v3::ExportFlowResponse>>,
       ExportFlow, (google::longrunning::Operation const& operation),
       (override));
+
+  MOCK_METHOD((StreamRange<google::cloud::location::Location>), ListLocations,
+              (google::cloud::location::ListLocationsRequest request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::cloud::location::Location>, GetLocation,
+              (google::cloud::location::GetLocationRequest const& request),
+              (override));
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

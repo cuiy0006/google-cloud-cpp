@@ -54,6 +54,22 @@ Idempotency BatchControllerConnectionIdempotencyPolicy::DeleteBatch(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency BatchControllerConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency BatchControllerConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency BatchControllerConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<BatchControllerConnectionIdempotencyPolicy>
 MakeDefaultBatchControllerConnectionIdempotencyPolicy() {
   return std::make_unique<BatchControllerConnectionIdempotencyPolicy>();

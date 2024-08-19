@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dataproc/v1/node_groups.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -45,6 +46,15 @@ class NodeGroupControllerConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency GetNodeGroup(
       google::cloud::dataproc::v1::GetNodeGroupRequest const& request);
+
+  virtual google::cloud::Idempotency SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency TestIamPermissions(
+      google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 std::unique_ptr<NodeGroupControllerConnectionIdempotencyPolicy>

@@ -237,6 +237,21 @@ class TensorboardServiceTracingConnection
       google::cloud::aiplatform::v1::ExportTensorboardTimeSeriesDataRequest
           request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
+      google::iam::v1::TestIamPermissionsRequest const& request) override;
+
  private:
   std::shared_ptr<aiplatform_v1::TensorboardServiceConnection> child_;
 };

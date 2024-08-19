@@ -226,6 +226,23 @@ ConversationModelsAuth::CreateConversationModelEvaluation(
   return child_->CreateConversationModelEvaluation(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+ConversationModelsAuth::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> ConversationModelsAuth::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 ConversationModelsAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

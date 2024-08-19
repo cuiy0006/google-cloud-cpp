@@ -30,7 +30,9 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/workstations/v1/workstations.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 
@@ -357,6 +359,15 @@ class WorkstationsConnection {
   GenerateAccessToken(
       google::cloud::workstations::v1::GenerateAccessTokenRequest const&
           request);
+
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 /**

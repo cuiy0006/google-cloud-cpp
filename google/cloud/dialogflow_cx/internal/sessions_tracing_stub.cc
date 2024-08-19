@@ -115,6 +115,29 @@ SessionsTracingStub::SubmitAnswerFeedback(
       context, *span, child_->SubmitAnswerFeedback(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+SessionsTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.dialogflow.cx.v3.Sessions",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> SessionsTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.dialogflow.cx.v3.Sessions",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<SessionsStub> MakeSessionsTracingStub(

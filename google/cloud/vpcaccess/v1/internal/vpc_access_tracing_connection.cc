@@ -111,6 +111,17 @@ VpcAccessServiceTracingConnection::DeleteConnector(
   return internal::EndSpan(std::move(span), child_->DeleteConnector(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+VpcAccessServiceTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "vpcaccess_v1::VpcAccessServiceConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<vpcaccess_v1::VpcAccessServiceConnection>

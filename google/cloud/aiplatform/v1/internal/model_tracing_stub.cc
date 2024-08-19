@@ -343,6 +343,64 @@ ModelServiceTracingStub::ListModelEvaluationSlices(
       child_->ListModelEvaluationSlices(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+ModelServiceTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.aiplatform.v1.ModelService",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+ModelServiceTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.aiplatform.v1.ModelService",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
+StatusOr<google::iam::v1::Policy> ModelServiceTracingStub::SetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.aiplatform.v1.ModelService",
+                                     "SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->SetIamPolicy(context, options, request));
+}
+
+StatusOr<google::iam::v1::Policy> ModelServiceTracingStub::GetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.aiplatform.v1.ModelService",
+                                     "GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetIamPolicy(context, options, request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+ModelServiceTracingStub::TestIamPermissions(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.aiplatform.v1.ModelService",
+                                     "TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(
+      context, *span, child_->TestIamPermissions(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 ModelServiceTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

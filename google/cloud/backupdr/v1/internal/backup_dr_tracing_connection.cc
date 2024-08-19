@@ -116,6 +116,51 @@ BackupDRTracingConnection::DeleteManagementServer(
                            child_->DeleteManagementServer(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+BackupDRTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span =
+      internal::MakeSpan("backupdr_v1::BackupDRConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+BackupDRTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpan("backupdr_v1::BackupDRConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy> BackupDRTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("backupdr_v1::BackupDRConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy> BackupDRTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("backupdr_v1::BackupDRConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+BackupDRTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span =
+      internal::MakeSpan("backupdr_v1::BackupDRConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<backupdr_v1::BackupDRConnection> MakeBackupDRTracingConnection(

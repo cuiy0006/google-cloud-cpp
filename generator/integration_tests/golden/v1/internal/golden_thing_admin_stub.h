@@ -189,10 +189,10 @@ class GoldenThingAdminStub {
 class DefaultGoldenThingAdminStub : public GoldenThingAdminStub {
  public:
   DefaultGoldenThingAdminStub(
-      std::unique_ptr<google::test::admin::database::v1::GoldenThingAdmin::StubInterface> grpc_stub,
-      std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
-      : grpc_stub_(std::move(grpc_stub)),
-        operations_(std::move(operations)) {}
+      std::unique_ptr<google::test::admin::database::v1::GoldenThingAdmin::StubInterface> grpc_stub
+      ,std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
+      : grpc_stub_(std::move(grpc_stub))
+        , operations_(std::move(operations)) {}
 
   StatusOr<google::test::admin::database::v1::ListDatabasesResponse> ListDatabases(
       grpc::ClientContext& context,

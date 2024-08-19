@@ -492,6 +492,29 @@ StatusOr<google::longrunning::Operation> DatastreamTracingStub::DeleteRoute(
                            child_->DeleteRoute(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DatastreamTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.datastream.v1.Datastream",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> DatastreamTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.datastream.v1.Datastream",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 DatastreamTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

@@ -106,6 +106,30 @@ Status TransitionRouteGroupsTracingStub::DeleteTransitionRouteGroup(
       child_->DeleteTransitionRouteGroup(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+TransitionRouteGroupsTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.dialogflow.cx.v3.TransitionRouteGroups", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+TransitionRouteGroupsTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.dialogflow.cx.v3.TransitionRouteGroups", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<TransitionRouteGroupsStub> MakeTransitionRouteGroupsTracingStub(

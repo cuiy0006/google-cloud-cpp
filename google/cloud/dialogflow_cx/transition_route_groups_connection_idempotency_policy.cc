@@ -69,6 +69,16 @@ TransitionRouteGroupsConnectionIdempotencyPolicy::DeleteTransitionRouteGroup(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency TransitionRouteGroupsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TransitionRouteGroupsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TransitionRouteGroupsConnectionIdempotencyPolicy>
 MakeDefaultTransitionRouteGroupsConnectionIdempotencyPolicy() {
   return std::make_unique<TransitionRouteGroupsConnectionIdempotencyPolicy>();

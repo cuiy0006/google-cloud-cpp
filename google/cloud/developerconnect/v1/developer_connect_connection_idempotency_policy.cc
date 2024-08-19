@@ -113,6 +113,16 @@ Idempotency DeveloperConnectConnectionIdempotencyPolicy::FetchGitRefs(
   return Idempotency::kIdempotent;
 }
 
+Idempotency DeveloperConnectConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DeveloperConnectConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DeveloperConnectConnectionIdempotencyPolicy>
 MakeDefaultDeveloperConnectConnectionIdempotencyPolicy() {
   return std::make_unique<DeveloperConnectConnectionIdempotencyPolicy>();

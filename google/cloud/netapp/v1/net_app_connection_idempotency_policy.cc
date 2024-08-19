@@ -289,6 +289,16 @@ Idempotency NetAppConnectionIdempotencyPolicy::DeleteBackupPolicy(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency NetAppConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency NetAppConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<NetAppConnectionIdempotencyPolicy>
 MakeDefaultNetAppConnectionIdempotencyPolicy() {
   return std::make_unique<NetAppConnectionIdempotencyPolicy>();

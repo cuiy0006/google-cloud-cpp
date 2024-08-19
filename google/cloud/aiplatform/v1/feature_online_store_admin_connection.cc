@@ -231,6 +231,38 @@ FeatureOnlineStoreAdminServiceConnection::ListFeatureViewSyncs(
       StreamRange<google::cloud::aiplatform::v1::FeatureViewSync>>();
 }
 
+StreamRange<google::cloud::location::Location>
+FeatureOnlineStoreAdminServiceConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location>
+FeatureOnlineStoreAdminServiceConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy>
+FeatureOnlineStoreAdminServiceConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy>
+FeatureOnlineStoreAdminServiceConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+FeatureOnlineStoreAdminServiceConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<FeatureOnlineStoreAdminServiceConnection>
 MakeFeatureOnlineStoreAdminServiceConnection(std::string const& location,
                                              Options options) {

@@ -217,6 +217,36 @@ Idempotency CertificateAuthorityServiceConnectionIdempotencyPolicy::
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency
+CertificateAuthorityServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency CertificateAuthorityServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+CertificateAuthorityServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency
+CertificateAuthorityServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+CertificateAuthorityServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<CertificateAuthorityServiceConnectionIdempotencyPolicy>
 MakeDefaultCertificateAuthorityServiceConnectionIdempotencyPolicy() {
   return std::make_unique<

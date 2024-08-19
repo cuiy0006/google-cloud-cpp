@@ -64,6 +64,18 @@ class SessionTemplateControllerAuth : public SessionTemplateControllerStub {
       google::cloud::dataproc::v1::DeleteSessionTemplateRequest const& request)
       override;
 
+  StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) override;
+
  private:
   std::shared_ptr<google::cloud::internal::GrpcAuthenticationStrategy> auth_;
   std::shared_ptr<SessionTemplateControllerStub> child_;

@@ -234,6 +234,20 @@ RapidMigrationAssessmentConnection::PauseCollector(
       Status(StatusCode::kUnimplemented, "not implemented"));
 }
 
+StreamRange<google::cloud::location::Location>
+RapidMigrationAssessmentConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location>
+RapidMigrationAssessmentConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<RapidMigrationAssessmentConnection>
 MakeRapidMigrationAssessmentConnection(Options options) {
   internal::CheckExpectedOptions<CommonOptionList, GrpcOptionList,

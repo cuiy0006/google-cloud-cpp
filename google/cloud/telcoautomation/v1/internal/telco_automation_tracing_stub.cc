@@ -577,6 +577,30 @@ TelcoAutomationTracingStub::ApplyHydratedDeployment(
       child_->ApplyHydratedDeployment(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+TelcoAutomationTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.telcoautomation.v1.TelcoAutomation", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+TelcoAutomationTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.telcoautomation.v1.TelcoAutomation", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 TelcoAutomationTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

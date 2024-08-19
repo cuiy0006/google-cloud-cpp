@@ -82,10 +82,10 @@ class RequestIdServiceStub {
 class DefaultRequestIdServiceStub : public RequestIdServiceStub {
  public:
   DefaultRequestIdServiceStub(
-      std::unique_ptr<google::test::requestid::v1::RequestIdService::StubInterface> grpc_stub,
-      std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
-      : grpc_stub_(std::move(grpc_stub)),
-        operations_(std::move(operations)) {}
+      std::unique_ptr<google::test::requestid::v1::RequestIdService::StubInterface> grpc_stub
+      ,std::unique_ptr<google::longrunning::Operations::StubInterface> operations)
+      : grpc_stub_(std::move(grpc_stub))
+        , operations_(std::move(operations)) {}
 
   StatusOr<google::test::requestid::v1::Foo> CreateFoo(
       grpc::ClientContext& context,

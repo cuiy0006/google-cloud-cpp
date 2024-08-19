@@ -288,6 +288,12 @@ class TranslationServiceTracingConnection
   future<StatusOr<google::cloud::translation::v3::DeleteModelMetadata>>
   DeleteModel(google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<translate_v3::TranslationServiceConnection> child_;
 };

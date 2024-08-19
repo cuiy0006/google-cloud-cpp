@@ -56,6 +56,14 @@ class MockFulfillmentsConnection
       StatusOr<google::cloud::dialogflow::v2::Fulfillment>, UpdateFulfillment,
       (google::cloud::dialogflow::v2::UpdateFulfillmentRequest const& request),
       (override));
+
+  MOCK_METHOD((StreamRange<google::cloud::location::Location>), ListLocations,
+              (google::cloud::location::ListLocationsRequest request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::cloud::location::Location>, GetLocation,
+              (google::cloud::location::GetLocationRequest const& request),
+              (override));
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

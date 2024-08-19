@@ -1110,6 +1110,24 @@ NetAppTracingConnection::DeleteBackupPolicy(
                            child_->DeleteBackupPolicy(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+NetAppTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan("netapp_v1::NetAppConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+NetAppTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan("netapp_v1::NetAppConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<netapp_v1::NetAppConnection> MakeNetAppTracingConnection(

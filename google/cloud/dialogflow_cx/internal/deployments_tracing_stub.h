@@ -49,6 +49,14 @@ class DeploymentsTracingStub : public DeploymentsStub {
       google::cloud::dialogflow::cx::v3::GetDeploymentRequest const& request)
       override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<DeploymentsStub> child_;
   std::shared_ptr<opentelemetry::context::propagation::TextMapPropagator>

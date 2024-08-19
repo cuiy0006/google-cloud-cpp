@@ -134,6 +134,10 @@ class MockVpcAccessServiceConnection
   MOCK_METHOD(future<StatusOr<google::cloud::vpcaccess::v1::OperationMetadata>>,
               DeleteConnector,
               (google::longrunning::Operation const& operation), (override));
+
+  MOCK_METHOD((StreamRange<google::cloud::location::Location>), ListLocations,
+              (google::cloud::location::ListLocationsRequest request),
+              (override));
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

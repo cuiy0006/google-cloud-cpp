@@ -25,6 +25,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/datacatalog/v1/datacatalog.grpc.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <utility>

@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/cloud/filestore/v1/cloud_filestore_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -87,6 +88,12 @@ class CloudFilestoreManagerConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency UpdateBackup(
       google::cloud::filestore::v1::UpdateBackupRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<CloudFilestoreManagerConnectionIdempotencyPolicy>

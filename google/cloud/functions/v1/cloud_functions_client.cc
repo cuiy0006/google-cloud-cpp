@@ -241,6 +241,13 @@ CloudFunctionsServiceClient::TestIamPermissions(
   return connection_->TestIamPermissions(request);
 }
 
+StreamRange<google::cloud::location::Location>
+CloudFunctionsServiceClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace functions_v1
 }  // namespace cloud

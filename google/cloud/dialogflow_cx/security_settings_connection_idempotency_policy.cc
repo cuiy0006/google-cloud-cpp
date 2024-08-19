@@ -65,6 +65,16 @@ SecuritySettingsServiceConnectionIdempotencyPolicy::DeleteSecuritySettings(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SecuritySettingsServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency SecuritySettingsServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<SecuritySettingsServiceConnectionIdempotencyPolicy>
 MakeDefaultSecuritySettingsServiceConnectionIdempotencyPolicy() {
   return std::make_unique<SecuritySettingsServiceConnectionIdempotencyPolicy>();

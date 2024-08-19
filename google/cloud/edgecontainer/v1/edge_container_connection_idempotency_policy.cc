@@ -134,6 +134,16 @@ Idempotency EdgeContainerConnectionIdempotencyPolicy::GetServerConfig(
   return Idempotency::kIdempotent;
 }
 
+Idempotency EdgeContainerConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency EdgeContainerConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<EdgeContainerConnectionIdempotencyPolicy>
 MakeDefaultEdgeContainerConnectionIdempotencyPolicy() {
   return std::make_unique<EdgeContainerConnectionIdempotencyPolicy>();

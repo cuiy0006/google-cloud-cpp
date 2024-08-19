@@ -65,6 +65,23 @@ SessionTemplateControllerConnectionIdempotencyPolicy::DeleteSessionTemplate(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SessionTemplateControllerConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency SessionTemplateControllerConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+SessionTemplateControllerConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<SessionTemplateControllerConnectionIdempotencyPolicy>
 MakeDefaultSessionTemplateControllerConnectionIdempotencyPolicy() {
   return std::make_unique<

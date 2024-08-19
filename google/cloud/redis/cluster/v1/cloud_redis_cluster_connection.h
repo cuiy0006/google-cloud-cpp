@@ -30,6 +30,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/redis/cluster/v1/cloud_redis_cluster.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
@@ -229,6 +230,12 @@ class CloudRedisClusterConnection {
   GetClusterCertificateAuthority(
       google::cloud::redis::cluster::v1::
           GetClusterCertificateAuthorityRequest const& request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

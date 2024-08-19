@@ -500,6 +500,30 @@ DocumentProcessorServiceTracingStub::ListEvaluations(
                            child_->ListEvaluations(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DocumentProcessorServiceTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.documentai.v1.DocumentProcessorService", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+DocumentProcessorServiceTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.documentai.v1.DocumentProcessorService", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 DocumentProcessorServiceTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

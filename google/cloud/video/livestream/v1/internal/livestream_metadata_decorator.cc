@@ -430,6 +430,24 @@ StatusOr<google::longrunning::Operation> LivestreamServiceMetadata::UpdatePool(
   return child_->UpdatePool(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+LivestreamServiceMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location>
+LivestreamServiceMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 LivestreamServiceMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

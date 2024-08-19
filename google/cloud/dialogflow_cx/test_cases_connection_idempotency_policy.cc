@@ -94,6 +94,16 @@ Idempotency TestCasesConnectionIdempotencyPolicy::GetTestCaseResult(
   return Idempotency::kIdempotent;
 }
 
+Idempotency TestCasesConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TestCasesConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TestCasesConnectionIdempotencyPolicy>
 MakeDefaultTestCasesConnectionIdempotencyPolicy() {
   return std::make_unique<TestCasesConnectionIdempotencyPolicy>();

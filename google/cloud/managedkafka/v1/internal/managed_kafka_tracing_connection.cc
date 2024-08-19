@@ -223,6 +223,26 @@ Status ManagedKafkaTracingConnection::DeleteConsumerGroup(
   return internal::EndSpan(*span, child_->DeleteConsumerGroup(request));
 }
 
+StreamRange<google::cloud::location::Location>
+ManagedKafkaTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "managedkafka_v1::ManagedKafkaConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+ManagedKafkaTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "managedkafka_v1::ManagedKafkaConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<managedkafka_v1::ManagedKafkaConnection>

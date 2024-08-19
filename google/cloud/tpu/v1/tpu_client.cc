@@ -255,6 +255,18 @@ StatusOr<google::cloud::tpu::v1::AcceleratorType> TpuClient::GetAcceleratorType(
   return connection_->GetAcceleratorType(request);
 }
 
+StreamRange<google::cloud::location::Location> TpuClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location> TpuClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace tpu_v1
 }  // namespace cloud

@@ -26,6 +26,7 @@
 #include "google/cloud/common_options.h"
 #include "google/cloud/credentials.h"
 #include "google/cloud/grpc_options.h"
+#include "google/cloud/internal/pagination_range.h"
 #include "google/cloud/internal/unified_grpc_credentials.h"
 #include <memory>
 #include <utility>
@@ -46,6 +47,36 @@ LlmUtilityServiceConnection::CountTokens(
 StatusOr<google::cloud::aiplatform::v1::ComputeTokensResponse>
 LlmUtilityServiceConnection::ComputeTokens(
     google::cloud::aiplatform::v1::ComputeTokensRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StreamRange<google::cloud::location::Location>
+LlmUtilityServiceConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location>
+LlmUtilityServiceConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy> LlmUtilityServiceConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy> LlmUtilityServiceConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+LlmUtilityServiceConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
   return Status(StatusCode::kUnimplemented, "not implemented");
 }
 

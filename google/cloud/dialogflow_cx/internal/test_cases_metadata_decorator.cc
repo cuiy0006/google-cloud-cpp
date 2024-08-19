@@ -202,6 +202,23 @@ TestCasesMetadata::GetTestCaseResult(
   return child_->GetTestCaseResult(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+TestCasesMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> TestCasesMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 TestCasesMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

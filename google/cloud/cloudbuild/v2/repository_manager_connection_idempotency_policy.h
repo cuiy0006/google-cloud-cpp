@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/devtools/cloudbuild/v2/repositories.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -81,6 +82,15 @@ class RepositoryManagerConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency FetchGitRefs(
       google::devtools::cloudbuild::v2::FetchGitRefsRequest const& request);
+
+  virtual google::cloud::Idempotency SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency TestIamPermissions(
+      google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 std::unique_ptr<RepositoryManagerConnectionIdempotencyPolicy>

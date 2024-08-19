@@ -65,6 +65,16 @@ ConversationDatasetsConnectionIdempotencyPolicy::ImportConversationData(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ConversationDatasetsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ConversationDatasetsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ConversationDatasetsConnectionIdempotencyPolicy>
 MakeDefaultConversationDatasetsConnectionIdempotencyPolicy() {
   return std::make_unique<ConversationDatasetsConnectionIdempotencyPolicy>();

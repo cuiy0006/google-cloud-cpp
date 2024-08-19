@@ -398,6 +398,37 @@ DepServiceClient::DeleteLbRouteExtension(
   return connection_->DeleteLbRouteExtension(operation);
 }
 
+StreamRange<google::cloud::location::Location> DepServiceClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location> DepServiceClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
+StatusOr<google::iam::v1::Policy> DepServiceClient::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->SetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::Policy> DepServiceClient::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+DepServiceClient::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->TestIamPermissions(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace networkservices_v1
 }  // namespace cloud

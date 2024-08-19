@@ -23,6 +23,8 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/v2/answer_record.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 #include <utility>
 
@@ -46,6 +48,15 @@ class AnswerRecordsStub {
       grpc::ClientContext& context, Options const& options,
       google::cloud::dialogflow::v2::UpdateAnswerRecordRequest const&
           request) = 0;
+
+  virtual StatusOr<google::cloud::location::ListLocationsResponse>
+  ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) = 0;
 };
 
 class DefaultAnswerRecordsStub : public AnswerRecordsStub {
@@ -53,8 +64,11 @@ class DefaultAnswerRecordsStub : public AnswerRecordsStub {
   explicit DefaultAnswerRecordsStub(
       std::unique_ptr<
           google::cloud::dialogflow::v2::AnswerRecords::StubInterface>
-          grpc_stub)
-      : grpc_stub_(std::move(grpc_stub)) {}
+          grpc_stub,
+      std::unique_ptr<google::cloud::location::Locations::StubInterface>
+          locations_stub)
+      : grpc_stub_(std::move(grpc_stub)),
+        locations_stub_(std::move(locations_stub)) {}
 
   StatusOr<google::cloud::dialogflow::v2::ListAnswerRecordsResponse>
   ListAnswerRecords(
@@ -67,9 +81,19 @@ class DefaultAnswerRecordsStub : public AnswerRecordsStub {
       google::cloud::dialogflow::v2::UpdateAnswerRecordRequest const& request)
       override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::dialogflow::v2::AnswerRecords::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::cloud::location::Locations::StubInterface>
+      locations_stub_;
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

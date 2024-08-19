@@ -328,8 +328,8 @@ HttpExtensionInfo ParseHttpExtension(
     out->append(absl::visit(SegmentAsStringVisitor{}, s->value));
   };
 
-  auto api_version =
-      FormatApiVersionFromUrlPattern(url_pattern, method.file()->name());
+  auto api_version_opt = FormatApiVersionFromUrlPattern(url_pattern);
+  auto api_version = api_version_opt.has_value() ? *api_version_opt : FormatApiVersionFromPackageName(method);
 
   auto rest_path_visitor = RestPathVisitor(api_version, info.rest_path);
   for (auto const& s : parsed_http_rule->segments) {
@@ -403,8 +403,7 @@ std::string FormatApiVersionFromPackageName(
 
 // Generate api version by extracting the version from the url pattern.
 // In some cases(i.e. location), there is no version in the package name.
-std::string FormatApiVersionFromUrlPattern(std::string const& url_pattern,
-                                           std::string const& file_name) {
+absl::optional<std::string> FormatApiVersionFromUrlPattern(std::string const& url_pattern) {
   std::vector<std::string> parts = absl::StrSplit(url_pattern, '/');
   static auto const* const kVersion = new std::regex{R"(v\d+)"};
   for (auto const& part : parts) {
@@ -412,9 +411,7 @@ std::string FormatApiVersionFromUrlPattern(std::string const& url_pattern,
       return part;
     }
   }
-  GCP_LOG(FATAL) << "Unrecognized API version in file: " << file_name
-                 << ", url pattern: " << url_pattern;
-  return {};  // Suppress clang-tidy warnings
+  return absl::nullopt;  // Suppress clang-tidy warnings
 }
 
 }  // namespace generator_internal

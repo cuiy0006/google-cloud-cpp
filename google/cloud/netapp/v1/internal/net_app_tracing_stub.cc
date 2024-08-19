@@ -1087,6 +1087,29 @@ StatusOr<google::longrunning::Operation> NetAppTracingStub::DeleteBackupPolicy(
       context, *span, child_->DeleteBackupPolicy(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+NetAppTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.netapp.v1.NetApp", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> NetAppTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.netapp.v1.NetApp", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 NetAppTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

@@ -44,6 +44,16 @@ Idempotency FulfillmentsConnectionIdempotencyPolicy::UpdateFulfillment(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency FulfillmentsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency FulfillmentsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<FulfillmentsConnectionIdempotencyPolicy>
 MakeDefaultFulfillmentsConnectionIdempotencyPolicy() {
   return std::make_unique<FulfillmentsConnectionIdempotencyPolicy>();

@@ -30,6 +30,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/netapp/v1/cloud_netapp_service.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
@@ -586,6 +587,12 @@ class NetAppConnection {
 
   virtual future<StatusOr<google::cloud::netapp::v1::OperationMetadata>>
   DeleteBackupPolicy(google::longrunning::Operation const& operation);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

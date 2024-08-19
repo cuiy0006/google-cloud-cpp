@@ -89,6 +89,16 @@ Idempotency AgentsConnectionIdempotencyPolicy::UpdateGenerativeSettings(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency AgentsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency AgentsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<AgentsConnectionIdempotencyPolicy>
 MakeDefaultAgentsConnectionIdempotencyPolicy() {
   return std::make_unique<AgentsConnectionIdempotencyPolicy>();

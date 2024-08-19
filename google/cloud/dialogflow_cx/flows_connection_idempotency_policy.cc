@@ -83,6 +83,16 @@ Idempotency FlowsConnectionIdempotencyPolicy::ExportFlow(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency FlowsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency FlowsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<FlowsConnectionIdempotencyPolicy>
 MakeDefaultFlowsConnectionIdempotencyPolicy() {
   return std::make_unique<FlowsConnectionIdempotencyPolicy>();

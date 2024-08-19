@@ -693,6 +693,25 @@ WorkstationsClient::GenerateAccessToken(
   return connection_->GenerateAccessToken(request);
 }
 
+StatusOr<google::iam::v1::Policy> WorkstationsClient::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->SetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::Policy> WorkstationsClient::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetIamPolicy(request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+WorkstationsClient::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->TestIamPermissions(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace workstations_v1
 }  // namespace cloud

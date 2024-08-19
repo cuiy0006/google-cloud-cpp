@@ -209,6 +209,18 @@ CloudFunctionsServiceTracingStub::TestIamPermissions(
       context, *span, child_->TestIamPermissions(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+CloudFunctionsServiceTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.functions.v1.CloudFunctionsService", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 CloudFunctionsServiceTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

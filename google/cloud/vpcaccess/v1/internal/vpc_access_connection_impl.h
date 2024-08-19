@@ -83,6 +83,9 @@ class VpcAccessServiceConnectionImpl
   future<StatusOr<google::cloud::vpcaccess::v1::OperationMetadata>>
   DeleteConnector(google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<vpcaccess_v1_internal::VpcAccessServiceStub> stub_;

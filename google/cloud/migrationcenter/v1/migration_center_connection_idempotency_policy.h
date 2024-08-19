@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/migrationcenter/v1/migrationcenter.grpc.pb.h>
 #include <memory>
 
@@ -200,6 +201,12 @@ class MigrationCenterConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency DeleteReport(
       google::cloud::migrationcenter::v1::DeleteReportRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<MigrationCenterConnectionIdempotencyPolicy>

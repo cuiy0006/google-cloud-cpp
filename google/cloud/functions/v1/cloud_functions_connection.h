@@ -32,6 +32,8 @@
 #include "google/cloud/version.h"
 #include <google/cloud/functions/v1/functions.pb.h>
 #include <google/cloud/functions/v1/operations.pb.h>
+#include <google/cloud/location/locations.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 
@@ -252,6 +254,9 @@ class CloudFunctionsServiceConnection {
 
   virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
   TestIamPermissions(google::iam::v1::TestIamPermissionsRequest const& request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
 };
 
 /**

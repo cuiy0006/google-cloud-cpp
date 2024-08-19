@@ -274,6 +274,16 @@ Idempotency MigrationCenterConnectionIdempotencyPolicy::DeleteReport(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency MigrationCenterConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency MigrationCenterConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<MigrationCenterConnectionIdempotencyPolicy>
 MakeDefaultMigrationCenterConnectionIdempotencyPolicy() {
   return std::make_unique<MigrationCenterConnectionIdempotencyPolicy>();

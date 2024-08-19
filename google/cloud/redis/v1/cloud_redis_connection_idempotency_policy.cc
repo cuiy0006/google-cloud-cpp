@@ -89,6 +89,16 @@ Idempotency CloudRedisConnectionIdempotencyPolicy::RescheduleMaintenance(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency CloudRedisConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency CloudRedisConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<CloudRedisConnectionIdempotencyPolicy>
 MakeDefaultCloudRedisConnectionIdempotencyPolicy() {
   return std::make_unique<CloudRedisConnectionIdempotencyPolicy>();

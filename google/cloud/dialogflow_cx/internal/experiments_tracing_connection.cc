@@ -98,6 +98,26 @@ ExperimentsTracingConnection::StopExperiment(
   return internal::EndSpan(*span, child_->StopExperiment(request));
 }
 
+StreamRange<google::cloud::location::Location>
+ExperimentsTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span =
+      internal::MakeSpan("dialogflow_cx::ExperimentsConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+ExperimentsTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpan("dialogflow_cx::ExperimentsConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<dialogflow_cx::ExperimentsConnection>

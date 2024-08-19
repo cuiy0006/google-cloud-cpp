@@ -98,6 +98,31 @@ NodeGroupControllerAuth::GetNodeGroup(
   return child_->GetNodeGroup(context, options, request);
 }
 
+StatusOr<google::iam::v1::Policy> NodeGroupControllerAuth::SetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->SetIamPolicy(context, options, request);
+}
+
+StatusOr<google::iam::v1::Policy> NodeGroupControllerAuth::GetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->GetIamPolicy(context, options, request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+NodeGroupControllerAuth::TestIamPermissions(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->TestIamPermissions(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 NodeGroupControllerAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

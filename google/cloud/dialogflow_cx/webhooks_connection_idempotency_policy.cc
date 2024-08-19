@@ -59,6 +59,16 @@ Idempotency WebhooksConnectionIdempotencyPolicy::DeleteWebhook(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency WebhooksConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency WebhooksConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<WebhooksConnectionIdempotencyPolicy>
 MakeDefaultWebhooksConnectionIdempotencyPolicy() {
   return std::make_unique<WebhooksConnectionIdempotencyPolicy>();

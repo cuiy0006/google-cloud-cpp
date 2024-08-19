@@ -31,6 +31,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/v2/intent.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <google/protobuf/struct.pb.h>
 #include <memory>
@@ -222,6 +223,12 @@ class IntentsConnection {
 
   virtual future<StatusOr<google::protobuf::Struct>> BatchDeleteIntents(
       google::longrunning::Operation const& operation);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

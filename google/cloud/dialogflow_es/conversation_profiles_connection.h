@@ -31,6 +31,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/v2/conversation_profile.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <string>
@@ -239,6 +240,12 @@ class ConversationProfilesConnection {
 
   virtual future<StatusOr<google::cloud::dialogflow::v2::ConversationProfile>>
   ClearSuggestionFeatureConfig(google::longrunning::Operation const& operation);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

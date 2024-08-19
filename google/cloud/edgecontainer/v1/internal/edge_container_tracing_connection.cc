@@ -412,6 +412,26 @@ EdgeContainerTracingConnection::GetServerConfig(
   return internal::EndSpan(*span, child_->GetServerConfig(request));
 }
 
+StreamRange<google::cloud::location::Location>
+EdgeContainerTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "edgecontainer_v1::EdgeContainerConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+EdgeContainerTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "edgecontainer_v1::EdgeContainerConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<edgecontainer_v1::EdgeContainerConnection>

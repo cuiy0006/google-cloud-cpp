@@ -189,6 +189,16 @@ Idempotency AlloyDBAdminConnectionIdempotencyPolicy::DeleteUser(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency AlloyDBAdminConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency AlloyDBAdminConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<AlloyDBAdminConnectionIdempotencyPolicy>
 MakeDefaultAlloyDBAdminConnectionIdempotencyPolicy() {
   return std::make_unique<AlloyDBAdminConnectionIdempotencyPolicy>();

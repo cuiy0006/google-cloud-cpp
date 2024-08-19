@@ -162,6 +162,30 @@ DefaultCloudRedisClusterStub::GetClusterCertificateAuthority(
   return response;
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DefaultCloudRedisClusterStub::ListLocations(
+    grpc::ClientContext& context, Options const&,
+    google::cloud::location::ListLocationsRequest const& request) {
+  google::cloud::location::ListLocationsResponse response;
+  auto status = locations_stub_->ListLocations(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
+}
+
+StatusOr<google::cloud::location::Location>
+DefaultCloudRedisClusterStub::GetLocation(
+    grpc::ClientContext& context, Options const&,
+    google::cloud::location::GetLocationRequest const& request) {
+  google::cloud::location::Location response;
+  auto status = locations_stub_->GetLocation(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
+}
+
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudRedisClusterStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

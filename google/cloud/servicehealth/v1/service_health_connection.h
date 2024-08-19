@@ -27,6 +27,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/servicehealth/v1/event_service.pb.h>
 #include <memory>
 
@@ -205,6 +206,12 @@ class ServiceHealthConnection {
   GetOrganizationImpact(
       google::cloud::servicehealth::v1::GetOrganizationImpactRequest const&
           request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

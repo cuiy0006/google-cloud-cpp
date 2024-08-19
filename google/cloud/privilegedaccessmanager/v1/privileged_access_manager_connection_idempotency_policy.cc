@@ -118,6 +118,16 @@ Idempotency PrivilegedAccessManagerConnectionIdempotencyPolicy::RevokeGrant(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency PrivilegedAccessManagerConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PrivilegedAccessManagerConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<PrivilegedAccessManagerConnectionIdempotencyPolicy>
 MakeDefaultPrivilegedAccessManagerConnectionIdempotencyPolicy() {
   return std::make_unique<PrivilegedAccessManagerConnectionIdempotencyPolicy>();

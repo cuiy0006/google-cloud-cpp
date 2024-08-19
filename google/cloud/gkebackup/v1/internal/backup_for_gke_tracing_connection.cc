@@ -514,6 +514,51 @@ BackupForGKETracingConnection::GetBackupIndexDownloadUrl(
   return internal::EndSpan(*span, child_->GetBackupIndexDownloadUrl(request));
 }
 
+StreamRange<google::cloud::location::Location>
+BackupForGKETracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span =
+      internal::MakeSpan("gkebackup_v1::BackupForGKEConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+BackupForGKETracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpan("gkebackup_v1::BackupForGKEConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy> BackupForGKETracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("gkebackup_v1::BackupForGKEConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy> BackupForGKETracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("gkebackup_v1::BackupForGKEConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+BackupForGKETracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span = internal::MakeSpan(
+      "gkebackup_v1::BackupForGKEConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<gkebackup_v1::BackupForGKEConnection>

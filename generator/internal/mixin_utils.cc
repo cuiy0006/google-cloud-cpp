@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 using ::google::protobuf::DescriptorPool;
@@ -37,6 +38,7 @@ std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(
   std::unordered_map<std::string, MixinMethodOverride> mixin_method_overrides;
   if (service_config.Type() != YAML::NodeType::Map)
     return mixin_method_overrides;
+  if (!service_config["http"]) return mixin_method_overrides;
   auto const& http = service_config["http"];
   if (http.Type() != YAML::NodeType::Map) return mixin_method_overrides;
   auto const& rules = http["rules"];
@@ -70,19 +72,14 @@ std::unordered_map<std::string, MixinMethodOverride> GetMixinMethodOverrides(
   return mixin_method_overrides;
 }
 
-std::unordered_map<std::string, MixinMethodOverride>
-GetDedupedMixinMethodOverrides(YAML::Node const& service_config,
-                               ServiceDescriptor const& service) {
-  auto mixin_method_overrides = GetMixinMethodOverrides(service_config);
+std::unordered_set<std::string> GetMethodNames(
+    ServiceDescriptor const& service) {
+  std::unordered_set<std::string> method_names;
   for (int i = 0; i < service.method_count(); ++i) {
     auto const* method = service.method(i);
-    auto method_full_name = method->full_name();
-    if (mixin_method_overrides.find(method_full_name) !=
-        mixin_method_overrides.end()) {
-      mixin_method_overrides.erase(method_full_name);
-    }
+    method_names.insert(method->name());
   }
-  return mixin_method_overrides;
+  return method_names;
 }
 
 }  // namespace
@@ -118,9 +115,9 @@ std::vector<MixinMethod> GetMixinMethods(YAML::Node const& service_config,
                    << " DescriptorPool doesn't exist for service: "
                    << service.full_name();
   }
+  std::unordered_set<std::string> const method_names = GetMethodNames(service);
   auto mixin_proto_paths = GetMixinProtoPaths(service_config);
-  auto mixin_method_overrides =
-      GetDedupedMixinMethodOverrides(service_config, service);
+  auto mixin_method_overrides = GetMixinMethodOverrides(service_config);
 
   for (auto const& mixin_proto_path : mixin_proto_paths) {
     FileDescriptor const* mixin_file = pool->FindFileByName(mixin_proto_path);
@@ -138,6 +135,11 @@ std::vector<MixinMethod> GetMixinMethods(YAML::Node const& service_config,
         if (mixin_method_overrides.find(mixin_method_full_name) ==
             mixin_method_overrides.end())
           continue;
+
+        auto mixin_method_name = mixin_method->name();
+        if (method_names.find(mixin_method_name) != method_names.end())
+          continue;
+
         mixin_methods.push_back(
             {absl::AsciiStrToLower(mixin_service->name()) + "_stub",
              ProtoNameToCppName(mixin_service->full_name()), *mixin_method,

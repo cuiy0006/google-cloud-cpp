@@ -132,6 +132,23 @@ StatusOr<google::longrunning::Operation> WorkflowsAuth::UpdateWorkflow(
   return child_->UpdateWorkflow(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+WorkflowsAuth::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> WorkflowsAuth::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 WorkflowsAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

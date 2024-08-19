@@ -252,6 +252,12 @@ class DocumentProcessorServiceConnectionImpl
   StreamRange<google::cloud::documentai::v1::Evaluation> ListEvaluations(
       google::cloud::documentai::v1::ListEvaluationsRequest request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<documentai_v1_internal::DocumentProcessorServiceStub> stub_;

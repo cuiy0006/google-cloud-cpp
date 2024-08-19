@@ -117,6 +117,18 @@ DefaultVpcAccessServiceStub::DeleteConnector(
   return response;
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DefaultVpcAccessServiceStub::ListLocations(
+    grpc::ClientContext& context, Options const&,
+    google::cloud::location::ListLocationsRequest const& request) {
+  google::cloud::location::ListLocationsResponse response;
+  auto status = locations_stub_->ListLocations(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
+}
+
 future<StatusOr<google::longrunning::Operation>>
 DefaultVpcAccessServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

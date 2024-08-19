@@ -75,6 +75,16 @@ Idempotency ContentServiceConnectionIdempotencyPolicy::ListContent(
   return Idempotency::kIdempotent;
 }
 
+Idempotency ContentServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ContentServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ContentServiceConnectionIdempotencyPolicy>
 MakeDefaultContentServiceConnectionIdempotencyPolicy() {
   return std::make_unique<ContentServiceConnectionIdempotencyPolicy>();

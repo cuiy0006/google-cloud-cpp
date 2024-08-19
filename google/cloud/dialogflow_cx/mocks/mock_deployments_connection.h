@@ -56,6 +56,14 @@ class MockDeploymentsConnection : public dialogflow_cx::DeploymentsConnection {
       StatusOr<google::cloud::dialogflow::cx::v3::Deployment>, GetDeployment,
       (google::cloud::dialogflow::cx::v3::GetDeploymentRequest const& request),
       (override));
+
+  MOCK_METHOD((StreamRange<google::cloud::location::Location>), ListLocations,
+              (google::cloud::location::ListLocationsRequest request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::cloud::location::Location>, GetLocation,
+              (google::cloud::location::GetLocationRequest const& request),
+              (override));
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

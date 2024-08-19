@@ -94,6 +94,24 @@ Status SessionEntityTypesMetadata::DeleteSessionEntityType(
   return child_->DeleteSessionEntityType(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+SessionEntityTypesMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location>
+SessionEntityTypesMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 void SessionEntityTypesMetadata::SetMetadata(
     grpc::ClientContext& context, Options const& options,
     std::string const& request_params) {

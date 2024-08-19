@@ -995,6 +995,29 @@ VmMigrationTracingStub::GetReplicationCycle(
       context, *span, child_->GetReplicationCycle(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+VmMigrationTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.vmmigration.v1.VmMigration",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> VmMigrationTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.vmmigration.v1.VmMigration",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 VmMigrationTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

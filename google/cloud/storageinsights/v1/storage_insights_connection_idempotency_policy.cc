@@ -69,6 +69,16 @@ Idempotency StorageInsightsConnectionIdempotencyPolicy::GetReportDetail(
   return Idempotency::kIdempotent;
 }
 
+Idempotency StorageInsightsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency StorageInsightsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<StorageInsightsConnectionIdempotencyPolicy>
 MakeDefaultStorageInsightsConnectionIdempotencyPolicy() {
   return std::make_unique<StorageInsightsConnectionIdempotencyPolicy>();

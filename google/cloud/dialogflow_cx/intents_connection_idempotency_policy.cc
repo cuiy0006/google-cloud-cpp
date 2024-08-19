@@ -69,6 +69,16 @@ Idempotency IntentsConnectionIdempotencyPolicy::ExportIntents(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency IntentsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency IntentsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<IntentsConnectionIdempotencyPolicy>
 MakeDefaultIntentsConnectionIdempotencyPolicy() {
   return std::make_unique<IntentsConnectionIdempotencyPolicy>();

@@ -29,6 +29,7 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/dialogflow/v2/context.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -44,8 +45,10 @@ std::shared_ptr<ContextsStub> CreateDefaultContextsStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::dialogflow::v2::Contexts::NewStub(channel);
-  std::shared_ptr<ContextsStub> stub =
-      std::make_shared<DefaultContextsStub>(std::move(service_grpc_stub));
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
+  std::shared_ptr<ContextsStub> stub = std::make_shared<DefaultContextsStub>(
+      std::move(service_grpc_stub), std::move(service_locations_stub));
 
   if (auth->RequiresConfigureContext()) {
     stub = std::make_shared<ContextsAuth>(std::move(auth), std::move(stub));

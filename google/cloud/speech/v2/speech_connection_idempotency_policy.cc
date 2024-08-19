@@ -144,6 +144,16 @@ Idempotency SpeechConnectionIdempotencyPolicy::UndeletePhraseSet(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SpeechConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency SpeechConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<SpeechConnectionIdempotencyPolicy>
 MakeDefaultSpeechConnectionIdempotencyPolicy() {
   return std::make_unique<SpeechConnectionIdempotencyPolicy>();

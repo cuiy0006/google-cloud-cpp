@@ -31,6 +31,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/documentai/v1/document_processor_service.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <string>
@@ -392,6 +393,12 @@ class DocumentProcessorServiceConnection {
   virtual StreamRange<google::cloud::documentai::v1::Evaluation>
   ListEvaluations(
       google::cloud::documentai::v1::ListEvaluationsRequest request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

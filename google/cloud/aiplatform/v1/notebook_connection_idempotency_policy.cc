@@ -122,6 +122,32 @@ NotebookServiceConnectionIdempotencyPolicy::DeleteNotebookExecutionJob(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency NotebookServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency NotebookServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency NotebookServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency NotebookServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency NotebookServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<NotebookServiceConnectionIdempotencyPolicy>
 MakeDefaultNotebookServiceConnectionIdempotencyPolicy() {
   return std::make_unique<NotebookServiceConnectionIdempotencyPolicy>();

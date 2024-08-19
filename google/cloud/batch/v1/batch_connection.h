@@ -31,6 +31,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/batch/v1/batch.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 
@@ -209,6 +210,12 @@ class BatchServiceConnection {
 
   virtual StreamRange<google::cloud::batch::v1::Task> ListTasks(
       google::cloud::batch::v1::ListTasksRequest request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/memcache/v1/cloud_memcache.grpc.pb.h>
 #include <memory>
 
@@ -60,6 +61,12 @@ class CloudMemcacheConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency RescheduleMaintenance(
       google::cloud::memcache::v1::RescheduleMaintenanceRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<CloudMemcacheConnectionIdempotencyPolicy>

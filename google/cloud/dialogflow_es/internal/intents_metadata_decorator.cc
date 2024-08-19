@@ -126,6 +126,23 @@ StatusOr<google::longrunning::Operation> IntentsMetadata::BatchDeleteIntents(
   return child_->BatchDeleteIntents(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+IntentsMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> IntentsMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 IntentsMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

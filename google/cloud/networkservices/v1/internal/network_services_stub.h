@@ -24,7 +24,11 @@
 #include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/networkservices/v1/network_services.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <utility>
@@ -399,6 +403,28 @@ class NetworkServicesStub {
       grpc::ClientContext& context, Options options,
       google::cloud::networkservices::v1::DeleteMeshRequest const& request) = 0;
 
+  virtual StatusOr<google::cloud::location::ListLocationsResponse>
+  ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) = 0;
+
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -418,9 +444,15 @@ class DefaultNetworkServicesStub : public NetworkServicesStub {
       std::unique_ptr<
           google::cloud::networkservices::v1::NetworkServices::StubInterface>
           grpc_stub,
+      std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub,
+      std::unique_ptr<google::cloud::location::Locations::StubInterface>
+          locations_stub,
       std::unique_ptr<google::longrunning::Operations::StubInterface>
           operations)
-      : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
+      : grpc_stub_(std::move(grpc_stub)),
+        iampolicy_stub_(std::move(iampolicy_stub)),
+        locations_stub_(std::move(locations_stub)),
+        operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::networkservices::v1::ListEndpointPoliciesResponse>
   ListEndpointPolicies(
@@ -784,6 +816,26 @@ class DefaultNetworkServicesStub : public NetworkServicesStub {
       google::cloud::networkservices::v1::DeleteMeshRequest const& request)
       override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) override;
+
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -800,6 +852,9 @@ class DefaultNetworkServicesStub : public NetworkServicesStub {
   std::unique_ptr<
       google::cloud::networkservices::v1::NetworkServices::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub_;
+  std::unique_ptr<google::cloud::location::Locations::StubInterface>
+      locations_stub_;
   std::unique_ptr<google::longrunning::Operations::StubInterface> operations_;
 };
 

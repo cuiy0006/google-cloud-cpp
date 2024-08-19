@@ -119,6 +119,24 @@ Status WorkflowTemplateServiceConnection::DeleteWorkflowTemplate(
   return Status(StatusCode::kUnimplemented, "not implemented");
 }
 
+StatusOr<google::iam::v1::Policy>
+WorkflowTemplateServiceConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::Policy>
+WorkflowTemplateServiceConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+WorkflowTemplateServiceConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<WorkflowTemplateServiceConnection>
 MakeWorkflowTemplateServiceConnection(std::string const& location,
                                       Options options) {

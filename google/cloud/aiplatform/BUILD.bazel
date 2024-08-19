@@ -22,6 +22,8 @@ service_dirs = ["v1/"]
 
 googleapis_deps = [
     "@com_google_googleapis//google/cloud/aiplatform/v1:aiplatform_cc_grpc",
+    "@com_google_googleapis//google/cloud/location:location_cc_grpc",
+    "@com_google_googleapis//google/iam/v1:iam_cc_grpc",
 ]
 
 cc_gapic_library(

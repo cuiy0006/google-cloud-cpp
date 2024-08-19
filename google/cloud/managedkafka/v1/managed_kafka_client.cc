@@ -346,6 +346,19 @@ Status ManagedKafkaClient::DeleteConsumerGroup(
   return connection_->DeleteConsumerGroup(request);
 }
 
+StreamRange<google::cloud::location::Location>
+ManagedKafkaClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location> ManagedKafkaClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace managedkafka_v1
 }  // namespace cloud

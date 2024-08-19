@@ -109,6 +109,31 @@ Status JobControllerAuth::DeleteJob(
   return child_->DeleteJob(context, options, request);
 }
 
+StatusOr<google::iam::v1::Policy> JobControllerAuth::SetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->SetIamPolicy(context, options, request);
+}
+
+StatusOr<google::iam::v1::Policy> JobControllerAuth::GetIamPolicy(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->GetIamPolicy(context, options, request);
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+JobControllerAuth::TestIamPermissions(
+    grpc::ClientContext& context, Options const& options,
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->TestIamPermissions(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 JobControllerAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

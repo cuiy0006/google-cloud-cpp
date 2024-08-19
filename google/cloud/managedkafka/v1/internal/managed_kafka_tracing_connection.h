@@ -116,6 +116,12 @@ class ManagedKafkaTracingConnection
       google::cloud::managedkafka::v1::DeleteConsumerGroupRequest const&
           request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<managedkafka_v1::ManagedKafkaConnection> child_;
 };

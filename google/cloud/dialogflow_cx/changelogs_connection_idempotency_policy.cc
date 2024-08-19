@@ -44,6 +44,16 @@ Idempotency ChangelogsConnectionIdempotencyPolicy::GetChangelog(
   return Idempotency::kIdempotent;
 }
 
+Idempotency ChangelogsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ChangelogsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ChangelogsConnectionIdempotencyPolicy>
 MakeDefaultChangelogsConnectionIdempotencyPolicy() {
   return std::make_unique<ChangelogsConnectionIdempotencyPolicy>();

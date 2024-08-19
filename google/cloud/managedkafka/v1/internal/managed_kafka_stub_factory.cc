@@ -28,6 +28,7 @@
 #include "google/cloud/internal/opentelemetry.h"
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/managedkafka/v1/managed_kafka.grpc.pb.h>
 #include <memory>
 #include <utility>
@@ -44,9 +45,11 @@ std::shared_ptr<ManagedKafkaStub> CreateDefaultManagedKafkaStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::managedkafka::v1::ManagedKafka::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<ManagedKafkaStub> stub =
       std::make_shared<DefaultManagedKafkaStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

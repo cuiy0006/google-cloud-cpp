@@ -203,6 +203,32 @@ TensorboardServiceConnectionIdempotencyPolicy::ExportTensorboardTimeSeriesData(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency TensorboardServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TensorboardServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TensorboardServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency TensorboardServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TensorboardServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TensorboardServiceConnectionIdempotencyPolicy>
 MakeDefaultTensorboardServiceConnectionIdempotencyPolicy() {
   return std::make_unique<TensorboardServiceConnectionIdempotencyPolicy>();

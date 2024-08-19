@@ -365,6 +365,51 @@ EventarcTracingConnection::UpdateGoogleChannelConfig(
   return internal::EndSpan(*span, child_->UpdateGoogleChannelConfig(request));
 }
 
+StreamRange<google::cloud::location::Location>
+EventarcTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span =
+      internal::MakeSpan("eventarc_v1::EventarcConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+EventarcTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpan("eventarc_v1::EventarcConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
+StatusOr<google::iam::v1::Policy> EventarcTracingConnection::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("eventarc_v1::EventarcConnection::SetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->SetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::Policy> EventarcTracingConnection::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const& request) {
+  auto span =
+      internal::MakeSpan("eventarc_v1::EventarcConnection::GetIamPolicy");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetIamPolicy(request));
+}
+
+StatusOr<google::iam::v1::TestIamPermissionsResponse>
+EventarcTracingConnection::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const& request) {
+  auto span =
+      internal::MakeSpan("eventarc_v1::EventarcConnection::TestIamPermissions");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->TestIamPermissions(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<eventarc_v1::EventarcConnection> MakeEventarcTracingConnection(

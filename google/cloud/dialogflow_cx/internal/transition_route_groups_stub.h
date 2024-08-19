@@ -23,6 +23,8 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/cx/v3/transition_route_group.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 #include <utility>
 
@@ -64,6 +66,15 @@ class TransitionRouteGroupsStub {
       grpc::ClientContext& context, Options const& options,
       google::cloud::dialogflow::cx::v3::
           DeleteTransitionRouteGroupRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::ListLocationsResponse>
+  ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) = 0;
 };
 
 class DefaultTransitionRouteGroupsStub : public TransitionRouteGroupsStub {
@@ -71,8 +82,11 @@ class DefaultTransitionRouteGroupsStub : public TransitionRouteGroupsStub {
   explicit DefaultTransitionRouteGroupsStub(
       std::unique_ptr<google::cloud::dialogflow::cx::v3::TransitionRouteGroups::
                           StubInterface>
-          grpc_stub)
-      : grpc_stub_(std::move(grpc_stub)) {}
+          grpc_stub,
+      std::unique_ptr<google::cloud::location::Locations::StubInterface>
+          locations_stub)
+      : grpc_stub_(std::move(grpc_stub)),
+        locations_stub_(std::move(locations_stub)) {}
 
   StatusOr<google::cloud::dialogflow::cx::v3::ListTransitionRouteGroupsResponse>
   ListTransitionRouteGroups(
@@ -103,10 +117,20 @@ class DefaultTransitionRouteGroupsStub : public TransitionRouteGroupsStub {
       google::cloud::dialogflow::cx::v3::
           DeleteTransitionRouteGroupRequest const& request) override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<
       google::cloud::dialogflow::cx::v3::TransitionRouteGroups::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::cloud::location::Locations::StubInterface>
+      locations_stub_;
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

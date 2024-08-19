@@ -104,6 +104,16 @@ Idempotency ManagedKafkaConnectionIdempotencyPolicy::DeleteConsumerGroup(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ManagedKafkaConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ManagedKafkaConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ManagedKafkaConnectionIdempotencyPolicy>
 MakeDefaultManagedKafkaConnectionIdempotencyPolicy() {
   return std::make_unique<ManagedKafkaConnectionIdempotencyPolicy>();

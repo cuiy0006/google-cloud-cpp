@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/storageinsights/v1/storageinsights.grpc.pb.h>
 #include <memory>
 
@@ -62,6 +63,12 @@ class StorageInsightsConnectionIdempotencyPolicy {
   virtual google::cloud::Idempotency GetReportDetail(
       google::cloud::storageinsights::v1::GetReportDetailRequest const&
           request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<StorageInsightsConnectionIdempotencyPolicy>

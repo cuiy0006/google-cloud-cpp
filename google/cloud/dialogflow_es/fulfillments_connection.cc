@@ -26,6 +26,7 @@
 #include "google/cloud/common_options.h"
 #include "google/cloud/credentials.h"
 #include "google/cloud/grpc_options.h"
+#include "google/cloud/internal/pagination_range.h"
 #include "google/cloud/internal/unified_grpc_credentials.h"
 #include <memory>
 #include <utility>
@@ -46,6 +47,19 @@ FulfillmentsConnection::GetFulfillment(
 StatusOr<google::cloud::dialogflow::v2::Fulfillment>
 FulfillmentsConnection::UpdateFulfillment(
     google::cloud::dialogflow::v2::UpdateFulfillmentRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
+StreamRange<google::cloud::location::Location>
+FulfillmentsConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location> FulfillmentsConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
   return Status(StatusCode::kUnimplemented, "not implemented");
 }
 

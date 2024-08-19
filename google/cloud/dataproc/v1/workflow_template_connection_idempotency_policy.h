@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dataproc/v1/workflow_templates.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -62,6 +63,15 @@ class WorkflowTemplateServiceConnectionIdempotencyPolicy {
   virtual google::cloud::Idempotency DeleteWorkflowTemplate(
       google::cloud::dataproc::v1::DeleteWorkflowTemplateRequest const&
           request);
+
+  virtual google::cloud::Idempotency SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency TestIamPermissions(
+      google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 std::unique_ptr<WorkflowTemplateServiceConnectionIdempotencyPolicy>

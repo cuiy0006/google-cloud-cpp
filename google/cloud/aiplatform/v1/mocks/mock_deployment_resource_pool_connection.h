@@ -189,6 +189,27 @@ class MockDeploymentResourcePoolServiceConnection
       future<StatusOr<google::cloud::aiplatform::v1::DeleteOperationMetadata>>,
       DeleteDeploymentResourcePool,
       (google::longrunning::Operation const& operation), (override));
+
+  MOCK_METHOD((StreamRange<google::cloud::location::Location>), ListLocations,
+              (google::cloud::location::ListLocationsRequest request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::cloud::location::Location>, GetLocation,
+              (google::cloud::location::GetLocationRequest const& request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::iam::v1::Policy>, SetIamPolicy,
+              (google::iam::v1::SetIamPolicyRequest const& request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::iam::v1::Policy>, GetIamPolicy,
+              (google::iam::v1::GetIamPolicyRequest const& request),
+              (override));
+
+  MOCK_METHOD(StatusOr<google::iam::v1::TestIamPermissionsResponse>,
+              TestIamPermissions,
+              (google::iam::v1::TestIamPermissionsRequest const& request),
+              (override));
 };
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END

@@ -213,6 +213,28 @@ TpuTracingStub::GetAcceleratorType(
       context, *span, child_->GetAcceleratorType(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+TpuTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.tpu.v1.Tpu", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> TpuTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.tpu.v1.Tpu", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 TpuTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

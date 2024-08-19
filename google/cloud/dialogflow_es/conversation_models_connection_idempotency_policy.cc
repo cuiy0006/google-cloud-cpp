@@ -90,6 +90,16 @@ Idempotency ConversationModelsConnectionIdempotencyPolicy::
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ConversationModelsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ConversationModelsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ConversationModelsConnectionIdempotencyPolicy>
 MakeDefaultConversationModelsConnectionIdempotencyPolicy() {
   return std::make_unique<ConversationModelsConnectionIdempotencyPolicy>();
