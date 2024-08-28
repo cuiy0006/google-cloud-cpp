@@ -378,6 +378,20 @@ DocumentProcessorServiceConnection::ListEvaluations(
       StreamRange<google::cloud::documentai::v1::Evaluation>>();
 }
 
+StreamRange<google::cloud::location::Location>
+DocumentProcessorServiceConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location>
+DocumentProcessorServiceConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<DocumentProcessorServiceConnection>
 MakeDocumentProcessorServiceConnection(std::string const& location,
                                        Options options) {

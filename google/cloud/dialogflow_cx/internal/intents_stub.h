@@ -25,6 +25,8 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/cx/v3/intent.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <utility>
@@ -86,6 +88,15 @@ class IntentsStub {
       google::cloud::dialogflow::cx::v3::ExportIntentsRequest const&
           request) = 0;
 
+  virtual StatusOr<google::cloud::location::ListLocationsResponse>
+  ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) = 0;
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) = 0;
+
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -104,9 +115,13 @@ class DefaultIntentsStub : public IntentsStub {
   DefaultIntentsStub(
       std::unique_ptr<google::cloud::dialogflow::cx::v3::Intents::StubInterface>
           grpc_stub,
+      std::unique_ptr<google::cloud::location::Locations::StubInterface>
+          locations_stub,
       std::unique_ptr<google::longrunning::Operations::StubInterface>
           operations)
-      : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
+      : grpc_stub_(std::move(grpc_stub)),
+        locations_stub_(std::move(locations_stub)),
+        operations_(std::move(operations)) {}
 
   StatusOr<google::cloud::dialogflow::cx::v3::ListIntentsResponse> ListIntents(
       grpc::ClientContext& context, Options const& options,
@@ -157,6 +172,14 @@ class DefaultIntentsStub : public IntentsStub {
       google::cloud::dialogflow::cx::v3::ExportIntentsRequest const& request)
       override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -172,6 +195,8 @@ class DefaultIntentsStub : public IntentsStub {
  private:
   std::unique_ptr<google::cloud::dialogflow::cx::v3::Intents::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::cloud::location::Locations::StubInterface>
+      locations_stub_;
   std::unique_ptr<google::longrunning::Operations::StubInterface> operations_;
 };
 

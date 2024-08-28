@@ -783,6 +783,24 @@ StatusOr<google::longrunning::Operation> MigrationCenterMetadata::DeleteReport(
   return child_->DeleteReport(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+MigrationCenterMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location>
+MigrationCenterMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 MigrationCenterMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

@@ -25,8 +25,10 @@
 #include "google/cloud/internal/retry_policy_impl.h"
 #include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
+#include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/confidentialcomputing/v1/service.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 
 namespace google {
@@ -198,6 +200,12 @@ class ConfidentialComputingConnection {
   VerifyAttestation(
       google::cloud::confidentialcomputing::v1::VerifyAttestationRequest const&
           request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

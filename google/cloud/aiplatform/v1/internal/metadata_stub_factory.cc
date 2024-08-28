@@ -29,6 +29,8 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/aiplatform/v1/metadata_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -44,9 +46,13 @@ std::shared_ptr<MetadataServiceStub> CreateDefaultMetadataServiceStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::aiplatform::v1::MetadataService::NewStub(channel);
+  auto service_iampolicy_stub = google::iam::v1::IAMPolicy::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<MetadataServiceStub> stub =
       std::make_shared<DefaultMetadataServiceStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_iampolicy_stub),
+          std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

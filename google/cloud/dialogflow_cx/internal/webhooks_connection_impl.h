@@ -67,6 +67,12 @@ class WebhooksConnectionImpl : public dialogflow_cx::WebhooksConnection {
       google::cloud::dialogflow::cx::v3::DeleteWebhookRequest const& request)
       override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<dialogflow_cx_internal::WebhooksStub> stub_;

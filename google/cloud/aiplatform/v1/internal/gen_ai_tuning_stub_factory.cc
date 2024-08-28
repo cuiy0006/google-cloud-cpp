@@ -29,6 +29,8 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/aiplatform/v1/genai_tuning_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -44,9 +46,13 @@ std::shared_ptr<GenAiTuningServiceStub> CreateDefaultGenAiTuningServiceStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::aiplatform::v1::GenAiTuningService::NewStub(channel);
+  auto service_iampolicy_stub = google::iam::v1::IAMPolicy::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<GenAiTuningServiceStub> stub =
       std::make_shared<DefaultGenAiTuningServiceStub>(
-          std::move(service_grpc_stub));
+          std::move(service_grpc_stub), std::move(service_iampolicy_stub),
+          std::move(service_locations_stub));
 
   if (auth->RequiresConfigureContext()) {
     stub = std::make_shared<GenAiTuningServiceAuth>(std::move(auth),

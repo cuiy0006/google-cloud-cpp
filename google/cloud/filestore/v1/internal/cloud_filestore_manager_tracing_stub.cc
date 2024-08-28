@@ -398,6 +398,30 @@ CloudFilestoreManagerTracingStub::UpdateBackup(
                            child_->UpdateBackup(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+CloudFilestoreManagerTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.filestore.v1.CloudFilestoreManager", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+CloudFilestoreManagerTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.filestore.v1.CloudFilestoreManager", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 CloudFilestoreManagerTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

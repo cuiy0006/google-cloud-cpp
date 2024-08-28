@@ -63,6 +63,16 @@ SessionEntityTypesConnectionIdempotencyPolicy::DeleteSessionEntityType(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SessionEntityTypesConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency SessionEntityTypesConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<SessionEntityTypesConnectionIdempotencyPolicy>
 MakeDefaultSessionEntityTypesConnectionIdempotencyPolicy() {
   return std::make_unique<SessionEntityTypesConnectionIdempotencyPolicy>();

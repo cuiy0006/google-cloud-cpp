@@ -22,6 +22,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/rapidmigrationassessment/v1/rapidmigrationassessment.grpc.pb.h>
 #include <memory>
 
@@ -77,6 +78,12 @@ class RapidMigrationAssessmentConnectionIdempotencyPolicy {
   virtual google::cloud::Idempotency PauseCollector(
       google::cloud::rapidmigrationassessment::v1::PauseCollectorRequest const&
           request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<RapidMigrationAssessmentConnectionIdempotencyPolicy>

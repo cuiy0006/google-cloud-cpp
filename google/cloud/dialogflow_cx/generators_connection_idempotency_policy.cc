@@ -59,6 +59,16 @@ Idempotency GeneratorsConnectionIdempotencyPolicy::DeleteGenerator(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency GeneratorsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency GeneratorsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<GeneratorsConnectionIdempotencyPolicy>
 MakeDefaultGeneratorsConnectionIdempotencyPolicy() {
   return std::make_unique<GeneratorsConnectionIdempotencyPolicy>();

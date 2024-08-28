@@ -65,6 +65,36 @@ DataprocMetastoreFederationConnectionIdempotencyPolicy::DeleteFederation(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency
+DataprocMetastoreFederationConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataprocMetastoreFederationConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+DataprocMetastoreFederationConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency
+DataprocMetastoreFederationConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+DataprocMetastoreFederationConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DataprocMetastoreFederationConnectionIdempotencyPolicy>
 MakeDefaultDataprocMetastoreFederationConnectionIdempotencyPolicy() {
   return std::make_unique<

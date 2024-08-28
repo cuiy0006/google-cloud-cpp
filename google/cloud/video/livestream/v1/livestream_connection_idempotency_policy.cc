@@ -164,6 +164,16 @@ Idempotency LivestreamServiceConnectionIdempotencyPolicy::UpdatePool(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency LivestreamServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency LivestreamServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<LivestreamServiceConnectionIdempotencyPolicy>
 MakeDefaultLivestreamServiceConnectionIdempotencyPolicy() {
   return std::make_unique<LivestreamServiceConnectionIdempotencyPolicy>();

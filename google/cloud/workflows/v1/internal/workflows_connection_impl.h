@@ -93,6 +93,12 @@ class WorkflowsConnectionImpl : public workflows_v1::WorkflowsConnection {
   future<StatusOr<google::cloud::workflows::v1::Workflow>> UpdateWorkflow(
       google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<workflows_v1_internal::WorkflowsStub> stub_;

@@ -190,6 +190,12 @@ class CloudFilestoreManagerTracingConnection
   future<StatusOr<google::cloud::filestore::v1::Backup>> UpdateBackup(
       google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<filestore_v1::CloudFilestoreManagerConnection> child_;
 };

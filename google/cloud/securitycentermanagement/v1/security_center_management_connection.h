@@ -28,6 +28,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/securitycentermanagement/v1/security_center_management.pb.h>
 #include <memory>
 
@@ -317,6 +318,12 @@ class SecurityCenterManagementConnection {
   UpdateSecurityCenterService(
       google::cloud::securitycentermanagement::v1::
           UpdateSecurityCenterServiceRequest const& request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

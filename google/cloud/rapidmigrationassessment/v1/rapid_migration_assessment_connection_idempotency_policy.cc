@@ -99,6 +99,16 @@ Idempotency RapidMigrationAssessmentConnectionIdempotencyPolicy::PauseCollector(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency RapidMigrationAssessmentConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency RapidMigrationAssessmentConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<RapidMigrationAssessmentConnectionIdempotencyPolicy>
 MakeDefaultRapidMigrationAssessmentConnectionIdempotencyPolicy() {
   return std::make_unique<

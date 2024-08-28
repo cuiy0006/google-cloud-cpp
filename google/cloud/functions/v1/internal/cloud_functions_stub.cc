@@ -217,6 +217,18 @@ DefaultCloudFunctionsServiceStub::TestIamPermissions(
   return response;
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DefaultCloudFunctionsServiceStub::ListLocations(
+    grpc::ClientContext& context, Options const&,
+    google::cloud::location::ListLocationsRequest const& request) {
+  google::cloud::location::ListLocationsResponse response;
+  auto status = locations_stub_->ListLocations(&context, request, &response);
+  if (!status.ok()) {
+    return google::cloud::MakeStatusFromRpcError(status);
+  }
+  return response;
+}
+
 future<StatusOr<google::longrunning::Operation>>
 DefaultCloudFunctionsServiceStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

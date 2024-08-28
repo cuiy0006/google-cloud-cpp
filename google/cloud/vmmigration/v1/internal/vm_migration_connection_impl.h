@@ -470,6 +470,12 @@ class VmMigrationConnectionImpl : public vmmigration_v1::VmMigrationConnection {
       google::cloud::vmmigration::v1::GetReplicationCycleRequest const& request)
       override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<vmmigration_v1_internal::VmMigrationStub> stub_;

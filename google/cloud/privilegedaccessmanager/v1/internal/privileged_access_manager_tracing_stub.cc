@@ -296,6 +296,32 @@ PrivilegedAccessManagerTracingStub::RevokeGrant(
                            child_->RevokeGrant(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+PrivilegedAccessManagerTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.privilegedaccessmanager.v1.PrivilegedAccessManager",
+      "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+PrivilegedAccessManagerTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.privilegedaccessmanager.v1.PrivilegedAccessManager",
+      "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 PrivilegedAccessManagerTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

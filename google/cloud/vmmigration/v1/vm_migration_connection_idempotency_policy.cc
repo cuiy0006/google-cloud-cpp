@@ -265,6 +265,16 @@ Idempotency VmMigrationConnectionIdempotencyPolicy::GetReplicationCycle(
   return Idempotency::kIdempotent;
 }
 
+Idempotency VmMigrationConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency VmMigrationConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<VmMigrationConnectionIdempotencyPolicy>
 MakeDefaultVmMigrationConnectionIdempotencyPolicy() {
   return std::make_unique<VmMigrationConnectionIdempotencyPolicy>();

@@ -27,6 +27,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/datacatalog/v1/policytagmanagerserialization.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <memory>
 
 namespace google {

@@ -88,6 +88,16 @@ Idempotency TpuConnectionIdempotencyPolicy::GetAcceleratorType(
   return Idempotency::kIdempotent;
 }
 
+Idempotency TpuConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TpuConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TpuConnectionIdempotencyPolicy>
 MakeDefaultTpuConnectionIdempotencyPolicy() {
   return std::make_unique<TpuConnectionIdempotencyPolicy>();

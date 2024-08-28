@@ -29,6 +29,8 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/kms/v1/autokey_admin.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -44,8 +46,13 @@ std::shared_ptr<AutokeyAdminStub> CreateDefaultAutokeyAdminStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::kms::v1::AutokeyAdmin::NewStub(channel);
+  auto service_iampolicy_stub = google::iam::v1::IAMPolicy::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<AutokeyAdminStub> stub =
-      std::make_shared<DefaultAutokeyAdminStub>(std::move(service_grpc_stub));
+      std::make_shared<DefaultAutokeyAdminStub>(
+          std::move(service_grpc_stub), std::move(service_iampolicy_stub),
+          std::move(service_locations_stub));
 
   if (auth->RequiresConfigureContext()) {
     stub = std::make_shared<AutokeyAdminAuth>(std::move(auth), std::move(stub));

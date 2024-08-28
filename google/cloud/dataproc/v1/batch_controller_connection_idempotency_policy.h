@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dataproc/v1/batches.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -48,6 +49,15 @@ class BatchControllerConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency DeleteBatch(
       google::cloud::dataproc::v1::DeleteBatchRequest const& request);
+
+  virtual google::cloud::Idempotency SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual google::cloud::Idempotency TestIamPermissions(
+      google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 std::unique_ptr<BatchControllerConnectionIdempotencyPolicy>

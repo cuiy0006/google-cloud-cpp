@@ -54,6 +54,11 @@ Idempotency VpcAccessServiceConnectionIdempotencyPolicy::DeleteConnector(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency VpcAccessServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<VpcAccessServiceConnectionIdempotencyPolicy>
 MakeDefaultVpcAccessServiceConnectionIdempotencyPolicy() {
   return std::make_unique<VpcAccessServiceConnectionIdempotencyPolicy>();

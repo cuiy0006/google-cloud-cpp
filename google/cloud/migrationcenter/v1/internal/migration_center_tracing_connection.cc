@@ -985,6 +985,26 @@ MigrationCenterTracingConnection::DeleteReport(
   return internal::EndSpan(std::move(span), child_->DeleteReport(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+MigrationCenterTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "migrationcenter_v1::MigrationCenterConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+MigrationCenterTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpan(
+      "migrationcenter_v1::MigrationCenterConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<migrationcenter_v1::MigrationCenterConnection>

@@ -218,6 +218,30 @@ CloudMemcacheTracingStub::RescheduleMaintenance(
       context, *span, child_->RescheduleMaintenance(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+CloudMemcacheTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.memcache.v1.CloudMemcache",
+                                     "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+CloudMemcacheTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc("google.cloud.memcache.v1.CloudMemcache",
+                                     "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 CloudMemcacheTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

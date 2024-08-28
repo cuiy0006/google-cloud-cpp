@@ -134,6 +134,12 @@ class EntityTypesConnectionImpl : public dialogflow_es::EntityTypesConnection {
   future<StatusOr<google::protobuf::Struct>> BatchDeleteEntities(
       google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::unique_ptr<google::cloud::BackgroundThreads> background_;
   std::shared_ptr<dialogflow_es_internal::EntityTypesStub> stub_;

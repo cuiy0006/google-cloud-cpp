@@ -22,6 +22,8 @@ service_dirs = [""]
 
 googleapis_deps = [
     "@com_google_googleapis//google/cloud/dialogflow/v2:dialogflow_cc_grpc",
+    "@com_google_googleapis//google/cloud/location:location_cc_grpc",
+    "@com_google_googleapis//google/iam/v1:iam_cc_grpc",
 ]
 
 cc_gapic_library(

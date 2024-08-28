@@ -978,6 +978,30 @@ MigrationCenterTracingStub::DeleteReport(
                            child_->DeleteReport(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+MigrationCenterTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.migrationcenter.v1.MigrationCenter", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location>
+MigrationCenterTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.migrationcenter.v1.MigrationCenter", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 MigrationCenterTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

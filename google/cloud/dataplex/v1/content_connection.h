@@ -28,6 +28,8 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dataplex/v1/content.pb.h>
+#include <google/cloud/location/locations.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <memory>
 
 namespace google {
@@ -205,6 +207,12 @@ class ContentServiceConnection {
 
   virtual StreamRange<google::cloud::dataplex::v1::Content> ListContent(
       google::cloud::dataplex::v1::ListContentRequest request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

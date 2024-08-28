@@ -30,6 +30,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/redis/v1/cloud_redis.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
@@ -276,6 +277,12 @@ class CloudRedisConnection {
 
   virtual future<StatusOr<google::cloud::redis::v1::Instance>>
   RescheduleMaintenance(google::longrunning::Operation const& operation);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

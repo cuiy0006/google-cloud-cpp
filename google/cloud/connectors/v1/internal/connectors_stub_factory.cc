@@ -29,6 +29,8 @@
 #include "google/cloud/log.h"
 #include "google/cloud/options.h"
 #include <google/cloud/connectors/v1/connectors_service.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
 #include <memory>
 #include <utility>
 
@@ -44,9 +46,13 @@ std::shared_ptr<ConnectorsStub> CreateDefaultConnectorsStub(
                                      internal::MakeChannelArguments(options));
   auto service_grpc_stub =
       google::cloud::connectors::v1::Connectors::NewStub(channel);
+  auto service_iampolicy_stub = google::iam::v1::IAMPolicy::NewStub(channel);
+  auto service_locations_stub =
+      google::cloud::location::Locations::NewStub(channel);
   std::shared_ptr<ConnectorsStub> stub =
       std::make_shared<DefaultConnectorsStub>(
-          std::move(service_grpc_stub),
+          std::move(service_grpc_stub), std::move(service_iampolicy_stub),
+          std::move(service_locations_stub),
           google::longrunning::Operations::NewStub(channel));
 
   if (auth->RequiresConfigureContext()) {

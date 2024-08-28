@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/telcoautomation/v1/telcoautomation.grpc.pb.h>
 #include <memory>
 
@@ -171,6 +172,12 @@ class TelcoAutomationConnectionIdempotencyPolicy {
   virtual google::cloud::Idempotency ApplyHydratedDeployment(
       google::cloud::telcoautomation::v1::ApplyHydratedDeploymentRequest const&
           request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<TelcoAutomationConnectionIdempotencyPolicy>

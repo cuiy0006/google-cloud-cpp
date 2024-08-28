@@ -404,6 +404,24 @@ CloudFilestoreManagerAuth::UpdateBackup(
   return child_->UpdateBackup(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+CloudFilestoreManagerAuth::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location>
+CloudFilestoreManagerAuth::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 CloudFilestoreManagerAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

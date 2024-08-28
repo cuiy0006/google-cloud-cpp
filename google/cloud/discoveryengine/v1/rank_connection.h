@@ -27,6 +27,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
 #include <google/cloud/discoveryengine/v1/rank_service.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 
 namespace google {

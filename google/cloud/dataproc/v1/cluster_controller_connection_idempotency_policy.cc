@@ -74,6 +74,22 @@ Idempotency ClusterControllerConnectionIdempotencyPolicy::DiagnoseCluster(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ClusterControllerConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency ClusterControllerConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ClusterControllerConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ClusterControllerConnectionIdempotencyPolicy>
 MakeDefaultClusterControllerConnectionIdempotencyPolicy() {
   return std::make_unique<ClusterControllerConnectionIdempotencyPolicy>();

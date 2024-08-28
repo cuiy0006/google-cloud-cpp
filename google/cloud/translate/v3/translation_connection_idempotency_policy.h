@@ -21,6 +21,7 @@
 
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <google/cloud/translate/v3/translation_service.grpc.pb.h>
 #include <memory>
 
@@ -161,6 +162,12 @@ class TranslationServiceConnectionIdempotencyPolicy {
 
   virtual google::cloud::Idempotency DeleteModel(
       google::cloud::translation::v3::DeleteModelRequest const& request);
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual google::cloud::Idempotency GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 std::unique_ptr<TranslationServiceConnectionIdempotencyPolicy>

@@ -26,6 +26,8 @@
 #include "google/cloud/version.h"
 #include <google/cloud/dataproc/v1/batches.grpc.pb.h>
 #include <google/cloud/dataproc/v1/operations.pb.h>
+#include <google/iam/v1/iam_policy.grpc.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
 #include <utility>
@@ -62,6 +64,19 @@ class BatchControllerStub {
       grpc::ClientContext& context, Options const& options,
       google::cloud::dataproc::v1::DeleteBatchRequest const& request) = 0;
 
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) = 0;
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) = 0;
+
   virtual future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -81,9 +96,12 @@ class DefaultBatchControllerStub : public BatchControllerStub {
       std::unique_ptr<
           google::cloud::dataproc::v1::BatchController::StubInterface>
           grpc_stub,
+      std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub,
       std::unique_ptr<google::longrunning::Operations::StubInterface>
           operations)
-      : grpc_stub_(std::move(grpc_stub)), operations_(std::move(operations)) {}
+      : grpc_stub_(std::move(grpc_stub)),
+        iampolicy_stub_(std::move(iampolicy_stub)),
+        operations_(std::move(operations)) {}
 
   future<StatusOr<google::longrunning::Operation>> AsyncCreateBatch(
       google::cloud::CompletionQueue& cq,
@@ -107,6 +125,18 @@ class DefaultBatchControllerStub : public BatchControllerStub {
       grpc::ClientContext& context, Options const& options,
       google::cloud::dataproc::v1::DeleteBatchRequest const& request) override;
 
+  StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::SetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::GetIamPolicyRequest const& request) override;
+
+  StatusOr<google::iam::v1::TestIamPermissionsResponse> TestIamPermissions(
+      grpc::ClientContext& context, Options const& options,
+      google::iam::v1::TestIamPermissionsRequest const& request) override;
+
   future<StatusOr<google::longrunning::Operation>> AsyncGetOperation(
       google::cloud::CompletionQueue& cq,
       std::shared_ptr<grpc::ClientContext> context,
@@ -122,6 +152,7 @@ class DefaultBatchControllerStub : public BatchControllerStub {
  private:
   std::unique_ptr<google::cloud::dataproc::v1::BatchController::StubInterface>
       grpc_stub_;
+  std::unique_ptr<google::iam::v1::IAMPolicy::StubInterface> iampolicy_stub_;
   std::unique_ptr<google::longrunning::Operations::StubInterface> operations_;
 };
 

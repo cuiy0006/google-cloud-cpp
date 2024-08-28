@@ -124,6 +124,18 @@ VpcAccessServiceLogging::DeleteConnector(
       context, options, request, __func__, tracing_options_);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+VpcAccessServiceLogging::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  return google::cloud::internal::LogWrapper(
+      [this](grpc::ClientContext& context, Options const& options,
+             google::cloud::location::ListLocationsRequest const& request) {
+        return child_->ListLocations(context, options, request);
+      },
+      context, options, request, __func__, tracing_options_);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 VpcAccessServiceLogging::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

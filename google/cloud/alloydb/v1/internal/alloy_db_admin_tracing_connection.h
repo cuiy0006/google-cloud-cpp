@@ -281,6 +281,12 @@ class AlloyDBAdminTracingConnection
   Status DeleteUser(
       google::cloud::alloydb::v1::DeleteUserRequest const& request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<alloydb_v1::AlloyDBAdminConnection> child_;
 };

@@ -59,6 +59,16 @@ Idempotency WorkflowsConnectionIdempotencyPolicy::UpdateWorkflow(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency WorkflowsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency WorkflowsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<WorkflowsConnectionIdempotencyPolicy>
 MakeDefaultWorkflowsConnectionIdempotencyPolicy() {
   return std::make_unique<WorkflowsConnectionIdempotencyPolicy>();

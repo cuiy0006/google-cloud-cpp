@@ -193,6 +193,18 @@ WorkflowsClient::UpdateWorkflow(google::longrunning::Operation const& operation,
   return connection_->UpdateWorkflow(operation);
 }
 
+StreamRange<google::cloud::location::Location> WorkflowsClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
+StatusOr<google::cloud::location::Location> WorkflowsClient::GetLocation(
+    google::cloud::location::GetLocationRequest const& request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->GetLocation(request);
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace workflows_v1
 }  // namespace cloud

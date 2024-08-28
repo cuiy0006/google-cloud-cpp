@@ -123,6 +123,23 @@ StatusOr<google::longrunning::Operation> WorkflowsMetadata::UpdateWorkflow(
   return child_->UpdateWorkflow(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+WorkflowsMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> WorkflowsMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 WorkflowsMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

@@ -484,6 +484,26 @@ EdgeNetworkTracingConnection::DeleteRouter(
   return internal::EndSpan(std::move(span), child_->DeleteRouter(operation));
 }
 
+StreamRange<google::cloud::location::Location>
+EdgeNetworkTracingConnection::ListLocations(
+    google::cloud::location::ListLocationsRequest request) {
+  auto span = internal::MakeSpan(
+      "edgenetwork_v1::EdgeNetworkConnection::ListLocations");
+  internal::OTelScope scope(span);
+  auto sr = child_->ListLocations(std::move(request));
+  return internal::MakeTracedStreamRange<google::cloud::location::Location>(
+      std::move(span), std::move(sr));
+}
+
+StatusOr<google::cloud::location::Location>
+EdgeNetworkTracingConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpan("edgenetwork_v1::EdgeNetworkConnection::GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  return internal::EndSpan(*span, child_->GetLocation(request));
+}
+
 #endif  // GOOGLE_CLOUD_CPP_HAVE_OPENTELEMETRY
 
 std::shared_ptr<edgenetwork_v1::EdgeNetworkConnection>

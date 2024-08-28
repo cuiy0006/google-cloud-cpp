@@ -110,6 +110,18 @@ VpcAccessServiceTracingStub::DeleteConnector(
                            child_->DeleteConnector(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+VpcAccessServiceTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.vpcaccess.v1.VpcAccessService", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 VpcAccessServiceTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

@@ -230,6 +230,16 @@ Idempotency TranslationServiceConnectionIdempotencyPolicy::DeleteModel(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency TranslationServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TranslationServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TranslationServiceConnectionIdempotencyPolicy>
 MakeDefaultTranslationServiceConnectionIdempotencyPolicy() {
   return std::make_unique<TranslationServiceConnectionIdempotencyPolicy>();

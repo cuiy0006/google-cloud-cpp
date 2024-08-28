@@ -22,6 +22,7 @@
 #include "google/cloud/options.h"
 #include "google/cloud/status_or.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/privacy/dlp/v2/dlp.grpc.pb.h>
 #include <memory>
 #include <utility>

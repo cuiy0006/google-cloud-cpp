@@ -54,6 +54,16 @@ Idempotency SessionsConnectionIdempotencyPolicy::SubmitAnswerFeedback(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency SessionsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency SessionsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<SessionsConnectionIdempotencyPolicy>
 MakeDefaultSessionsConnectionIdempotencyPolicy() {
   return std::make_unique<SessionsConnectionIdempotencyPolicy>();

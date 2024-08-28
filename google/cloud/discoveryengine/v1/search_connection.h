@@ -28,6 +28,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/discoveryengine/v1/search_service.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 
 namespace google {

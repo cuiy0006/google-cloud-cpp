@@ -64,6 +64,16 @@ Idempotency EnvironmentsConnectionIdempotencyPolicy::GetEnvironmentHistory(
   return Idempotency::kIdempotent;
 }
 
+Idempotency EnvironmentsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency EnvironmentsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<EnvironmentsConnectionIdempotencyPolicy>
 MakeDefaultEnvironmentsConnectionIdempotencyPolicy() {
   return std::make_unique<EnvironmentsConnectionIdempotencyPolicy>();

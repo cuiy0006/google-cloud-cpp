@@ -94,6 +94,32 @@ Idempotency PipelineServiceConnectionIdempotencyPolicy::BatchCancelPipelineJobs(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency PipelineServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PipelineServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PipelineServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency PipelineServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PipelineServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<PipelineServiceConnectionIdempotencyPolicy>
 MakeDefaultPipelineServiceConnectionIdempotencyPolicy() {
   return std::make_unique<PipelineServiceConnectionIdempotencyPolicy>();

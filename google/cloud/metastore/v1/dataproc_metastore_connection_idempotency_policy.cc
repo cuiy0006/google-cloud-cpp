@@ -125,6 +125,32 @@ DataprocMetastoreConnectionIdempotencyPolicy::AlterMetadataResourceLocation(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency DataprocMetastoreConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataprocMetastoreConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataprocMetastoreConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency DataprocMetastoreConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataprocMetastoreConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DataprocMetastoreConnectionIdempotencyPolicy>
 MakeDefaultDataprocMetastoreConnectionIdempotencyPolicy() {
   return std::make_unique<DataprocMetastoreConnectionIdempotencyPolicy>();

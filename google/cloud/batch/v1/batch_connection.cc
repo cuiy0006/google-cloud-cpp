@@ -88,6 +88,19 @@ StreamRange<google::cloud::batch::v1::Task> BatchServiceConnection::ListTasks(
       StreamRange<google::cloud::batch::v1::Task>>();
 }
 
+StreamRange<google::cloud::location::Location>
+BatchServiceConnection::ListLocations(
+    google::cloud::location::
+        ListLocationsRequest) {  // NOLINT(performance-unnecessary-value-param)
+  return google::cloud::internal::MakeUnimplementedPaginationRange<
+      StreamRange<google::cloud::location::Location>>();
+}
+
+StatusOr<google::cloud::location::Location> BatchServiceConnection::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Status(StatusCode::kUnimplemented, "not implemented");
+}
+
 std::shared_ptr<BatchServiceConnection> MakeBatchServiceConnection(
     Options options) {
   internal::CheckExpectedOptions<CommonOptionList, GrpcOptionList,

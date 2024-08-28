@@ -115,6 +115,32 @@ Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::GetDataAttribute(
   return Idempotency::kIdempotent;
 }
 
+Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DataTaxonomyServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DataTaxonomyServiceConnectionIdempotencyPolicy>
 MakeDefaultDataTaxonomyServiceConnectionIdempotencyPolicy() {
   return std::make_unique<DataTaxonomyServiceConnectionIdempotencyPolicy>();

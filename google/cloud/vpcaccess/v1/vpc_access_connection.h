@@ -30,6 +30,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/vpcaccess/v1/vpc_access.pb.h>
 #include <google/longrunning/operations.grpc.pb.h>
 #include <memory>
@@ -216,6 +217,9 @@ class VpcAccessServiceConnection {
 
   virtual future<StatusOr<google::cloud::vpcaccess::v1::OperationMetadata>>
   DeleteConnector(google::longrunning::Operation const& operation);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
 };
 
 /**

@@ -163,6 +163,16 @@ DocumentProcessorServiceConnectionIdempotencyPolicy::ListEvaluations(
   return Idempotency::kIdempotent;
 }
 
+Idempotency DocumentProcessorServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency DocumentProcessorServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<DocumentProcessorServiceConnectionIdempotencyPolicy>
 MakeDefaultDocumentProcessorServiceConnectionIdempotencyPolicy() {
   return std::make_unique<

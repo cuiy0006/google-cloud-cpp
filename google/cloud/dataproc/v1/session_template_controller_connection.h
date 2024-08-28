@@ -28,6 +28,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dataproc/v1/session_templates.pb.h>
+#include <google/iam/v1/iam_policy.pb.h>
 #include <memory>
 #include <string>
 
@@ -215,6 +216,15 @@ class SessionTemplateControllerConnection {
 
   virtual Status DeleteSessionTemplate(
       google::cloud::dataproc::v1::DeleteSessionTemplateRequest const& request);
+
+  virtual StatusOr<google::iam::v1::Policy> SetIamPolicy(
+      google::iam::v1::SetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::Policy> GetIamPolicy(
+      google::iam::v1::GetIamPolicyRequest const& request);
+
+  virtual StatusOr<google::iam::v1::TestIamPermissionsResponse>
+  TestIamPermissions(google::iam::v1::TestIamPermissionsRequest const& request);
 };
 
 /**

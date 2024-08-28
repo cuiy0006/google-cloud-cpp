@@ -153,6 +153,13 @@ VpcAccessServiceClient::DeleteConnector(
   return connection_->DeleteConnector(operation);
 }
 
+StreamRange<google::cloud::location::Location>
+VpcAccessServiceClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request, Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace vpcaccess_v1
 }  // namespace cloud

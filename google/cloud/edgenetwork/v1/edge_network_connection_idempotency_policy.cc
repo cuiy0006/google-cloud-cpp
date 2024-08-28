@@ -169,6 +169,16 @@ Idempotency EdgeNetworkConnectionIdempotencyPolicy::DeleteRouter(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency EdgeNetworkConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency EdgeNetworkConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<EdgeNetworkConnectionIdempotencyPolicy>
 MakeDefaultEdgeNetworkConnectionIdempotencyPolicy() {
   return std::make_unique<EdgeNetworkConnectionIdempotencyPolicy>();

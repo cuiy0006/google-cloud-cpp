@@ -28,6 +28,7 @@
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
 #include <google/cloud/dialogflow/v2/version.pb.h>
+#include <google/cloud/location/locations.pb.h>
 #include <memory>
 #include <string>
 
@@ -194,6 +195,12 @@ class VersionsConnection {
 
   virtual Status DeleteVersion(
       google::cloud::dialogflow::v2::DeleteVersionRequest const& request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

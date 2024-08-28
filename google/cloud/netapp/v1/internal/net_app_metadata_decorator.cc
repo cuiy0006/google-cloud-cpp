@@ -873,6 +873,23 @@ StatusOr<google::longrunning::Operation> NetAppMetadata::DeleteBackupPolicy(
   return child_->DeleteBackupPolicy(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+NetAppMetadata::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->ListLocations(context, options, request);
+}
+
+StatusOr<google::cloud::location::Location> NetAppMetadata::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  SetMetadata(context, options,
+              absl::StrCat("name=", internal::UrlEncode(request.name())));
+  return child_->GetLocation(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 NetAppMetadata::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

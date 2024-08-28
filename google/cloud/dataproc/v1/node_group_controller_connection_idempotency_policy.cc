@@ -50,6 +50,22 @@ Idempotency NodeGroupControllerConnectionIdempotencyPolicy::GetNodeGroup(
   return Idempotency::kIdempotent;
 }
 
+Idempotency NodeGroupControllerConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency NodeGroupControllerConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency NodeGroupControllerConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<NodeGroupControllerConnectionIdempotencyPolicy>
 MakeDefaultNodeGroupControllerConnectionIdempotencyPolicy() {
   return std::make_unique<NodeGroupControllerConnectionIdempotencyPolicy>();

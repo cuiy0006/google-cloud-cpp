@@ -188,6 +188,15 @@ CloudFunctionsServiceAuth::TestIamPermissions(
   return child_->TestIamPermissions(context, options, request);
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+CloudFunctionsServiceAuth::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto status = auth_->ConfigureContext(context);
+  if (!status.ok()) return status;
+  return child_->ListLocations(context, options, request);
+}
+
 future<StatusOr<google::longrunning::Operation>>
 CloudFunctionsServiceAuth::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

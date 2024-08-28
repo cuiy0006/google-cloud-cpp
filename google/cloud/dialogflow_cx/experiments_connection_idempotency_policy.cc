@@ -69,6 +69,16 @@ Idempotency ExperimentsConnectionIdempotencyPolicy::StopExperiment(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ExperimentsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ExperimentsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ExperimentsConnectionIdempotencyPolicy>
 MakeDefaultExperimentsConnectionIdempotencyPolicy() {
   return std::make_unique<ExperimentsConnectionIdempotencyPolicy>();

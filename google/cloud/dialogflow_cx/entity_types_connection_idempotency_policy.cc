@@ -69,6 +69,16 @@ Idempotency EntityTypesConnectionIdempotencyPolicy::ImportEntityTypes(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency EntityTypesConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency EntityTypesConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<EntityTypesConnectionIdempotencyPolicy>
 MakeDefaultEntityTypesConnectionIdempotencyPolicy() {
   return std::make_unique<EntityTypesConnectionIdempotencyPolicy>();

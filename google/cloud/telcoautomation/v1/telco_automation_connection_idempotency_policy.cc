@@ -232,6 +232,16 @@ Idempotency TelcoAutomationConnectionIdempotencyPolicy::ApplyHydratedDeployment(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency TelcoAutomationConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency TelcoAutomationConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<TelcoAutomationConnectionIdempotencyPolicy>
 MakeDefaultTelcoAutomationConnectionIdempotencyPolicy() {
   return std::make_unique<TelcoAutomationConnectionIdempotencyPolicy>();

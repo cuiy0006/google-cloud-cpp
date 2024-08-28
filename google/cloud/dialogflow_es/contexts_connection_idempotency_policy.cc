@@ -64,6 +64,16 @@ Idempotency ContextsConnectionIdempotencyPolicy::DeleteAllContexts(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency ContextsConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ContextsConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ContextsConnectionIdempotencyPolicy>
 MakeDefaultContextsConnectionIdempotencyPolicy() {
   return std::make_unique<ContextsConnectionIdempotencyPolicy>();

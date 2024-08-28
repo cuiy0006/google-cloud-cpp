@@ -29,6 +29,8 @@ googleapis_deps = [
     "@com_google_googleapis//google/cloud/beyondcorp/appconnections/v1:appconnections_cc_grpc",
     "@com_google_googleapis//google/cloud/beyondcorp/appconnectors/v1:appconnectors_cc_grpc",
     "@com_google_googleapis//google/cloud/beyondcorp/appgateways/v1:appgateways_cc_grpc",
+    "@com_google_googleapis//google/cloud/location:location_cc_grpc",
+    "@com_google_googleapis//google/iam/v1:iam_cc_grpc",
 ]
 
 cc_gapic_library(

@@ -144,6 +144,12 @@ class RapidMigrationAssessmentTracingConnection
   future<StatusOr<google::cloud::rapidmigrationassessment::v1::Collector>>
   PauseCollector(google::longrunning::Operation const& operation) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<
       rapidmigrationassessment_v1::RapidMigrationAssessmentConnection>

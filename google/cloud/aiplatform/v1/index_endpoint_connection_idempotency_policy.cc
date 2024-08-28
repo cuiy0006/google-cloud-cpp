@@ -79,6 +79,32 @@ IndexEndpointServiceConnectionIdempotencyPolicy::MutateDeployedIndex(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency IndexEndpointServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency IndexEndpointServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency IndexEndpointServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency IndexEndpointServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency IndexEndpointServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<IndexEndpointServiceConnectionIdempotencyPolicy>
 MakeDefaultIndexEndpointServiceConnectionIdempotencyPolicy() {
   return std::make_unique<IndexEndpointServiceConnectionIdempotencyPolicy>();

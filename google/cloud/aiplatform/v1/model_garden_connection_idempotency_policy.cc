@@ -39,6 +39,32 @@ Idempotency ModelGardenServiceConnectionIdempotencyPolicy::GetPublisherModel(
   return Idempotency::kIdempotent;
 }
 
+Idempotency ModelGardenServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ModelGardenServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ModelGardenServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency ModelGardenServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency ModelGardenServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<ModelGardenServiceConnectionIdempotencyPolicy>
 MakeDefaultModelGardenServiceConnectionIdempotencyPolicy() {
   return std::make_unique<ModelGardenServiceConnectionIdempotencyPolicy>();

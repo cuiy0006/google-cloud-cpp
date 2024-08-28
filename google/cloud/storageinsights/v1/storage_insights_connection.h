@@ -27,6 +27,7 @@
 #include "google/cloud/status_or.h"
 #include "google/cloud/stream_range.h"
 #include "google/cloud/version.h"
+#include <google/cloud/location/locations.pb.h>
 #include <google/cloud/storageinsights/v1/storageinsights.pb.h>
 #include <memory>
 
@@ -214,6 +215,12 @@ class StorageInsightsConnection {
   GetReportDetail(
       google::cloud::storageinsights::v1::GetReportDetailRequest const&
           request);
+
+  virtual StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request);
+
+  virtual StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request);
 };
 
 /**

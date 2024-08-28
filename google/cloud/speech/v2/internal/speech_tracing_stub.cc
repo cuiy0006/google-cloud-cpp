@@ -493,6 +493,29 @@ StatusOr<google::longrunning::Operation> SpeechTracingStub::UndeletePhraseSet(
       context, *span, child_->UndeletePhraseSet(context, options, request));
 }
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+SpeechTracingStub::ListLocations(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::ListLocationsRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.speech.v2.Speech", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->ListLocations(context, options, request));
+}
+
+StatusOr<google::cloud::location::Location> SpeechTracingStub::GetLocation(
+    grpc::ClientContext& context, Options const& options,
+    google::cloud::location::GetLocationRequest const& request) {
+  auto span =
+      internal::MakeSpanGrpc("google.cloud.speech.v2.Speech", "GetLocation");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(context, *span,
+                           child_->GetLocation(context, options, request));
+}
+
 future<StatusOr<google::longrunning::Operation>>
 SpeechTracingStub::AsyncGetOperation(
     google::cloud::CompletionQueue& cq,

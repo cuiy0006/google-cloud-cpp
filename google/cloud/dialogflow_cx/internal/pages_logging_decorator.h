@@ -61,6 +61,14 @@ class PagesLogging : public PagesStub {
                     google::cloud::dialogflow::cx::v3::DeletePageRequest const&
                         request) override;
 
+  StatusOr<google::cloud::location::ListLocationsResponse> ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<PagesStub> child_;
   TracingOptions tracing_options_;

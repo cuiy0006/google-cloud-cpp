@@ -66,6 +66,16 @@ CloudRedisClusterConnectionIdempotencyPolicy::GetClusterCertificateAuthority(
   return Idempotency::kIdempotent;
 }
 
+Idempotency CloudRedisClusterConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency CloudRedisClusterConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<CloudRedisClusterConnectionIdempotencyPolicy>
 MakeDefaultCloudRedisClusterConnectionIdempotencyPolicy() {
   return std::make_unique<CloudRedisClusterConnectionIdempotencyPolicy>();

@@ -64,6 +64,16 @@ Idempotency BatchServiceConnectionIdempotencyPolicy::ListTasks(
   return Idempotency::kIdempotent;
 }
 
+Idempotency BatchServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency BatchServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<BatchServiceConnectionIdempotencyPolicy>
 MakeDefaultBatchServiceConnectionIdempotencyPolicy() {
   return std::make_unique<BatchServiceConnectionIdempotencyPolicy>();

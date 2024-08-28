@@ -57,6 +57,12 @@ class PagesTracingConnection : public dialogflow_cx::PagesConnection {
   Status DeletePage(google::cloud::dialogflow::cx::v3::DeletePageRequest const&
                         request) override;
 
+  StreamRange<google::cloud::location::Location> ListLocations(
+      google::cloud::location::ListLocationsRequest request) override;
+
+  StatusOr<google::cloud::location::Location> GetLocation(
+      google::cloud::location::GetLocationRequest const& request) override;
+
  private:
   std::shared_ptr<dialogflow_cx::PagesConnection> child_;
 };

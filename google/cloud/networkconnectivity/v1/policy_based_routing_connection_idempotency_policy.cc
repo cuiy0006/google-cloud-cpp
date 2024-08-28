@@ -62,6 +62,33 @@ PolicyBasedRoutingServiceConnectionIdempotencyPolicy::DeletePolicyBasedRoute(
   return Idempotency::kNonIdempotent;
 }
 
+Idempotency PolicyBasedRoutingServiceConnectionIdempotencyPolicy::ListLocations(
+    google::cloud::location::ListLocationsRequest) {  // NOLINT
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PolicyBasedRoutingServiceConnectionIdempotencyPolicy::GetLocation(
+    google::cloud::location::GetLocationRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency PolicyBasedRoutingServiceConnectionIdempotencyPolicy::SetIamPolicy(
+    google::iam::v1::SetIamPolicyRequest const& request) {
+  return request.policy().etag().empty() ? Idempotency::kNonIdempotent
+                                         : Idempotency::kIdempotent;
+}
+
+Idempotency PolicyBasedRoutingServiceConnectionIdempotencyPolicy::GetIamPolicy(
+    google::iam::v1::GetIamPolicyRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
+Idempotency
+PolicyBasedRoutingServiceConnectionIdempotencyPolicy::TestIamPermissions(
+    google::iam::v1::TestIamPermissionsRequest const&) {
+  return Idempotency::kIdempotent;
+}
+
 std::unique_ptr<PolicyBasedRoutingServiceConnectionIdempotencyPolicy>
 MakeDefaultPolicyBasedRoutingServiceConnectionIdempotencyPolicy() {
   return std::make_unique<
