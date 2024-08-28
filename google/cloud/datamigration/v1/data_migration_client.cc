@@ -41,6 +41,14 @@ DataMigrationServiceClient::ListMigrationJobs(std::string const& parent,
   return connection_->ListMigrationJobs(request);
 }
 
+StreamRange<google::cloud::location::Location>
+DataMigrationServiceClient::ListLocations(
+    google::cloud::location::ListLocationsRequest request,
+    Options opts) {
+  internal::OptionsSpan span(internal::MergeOptions(std::move(opts), options_));
+  return connection_->ListLocations(std::move(request));
+}
+
 StreamRange<google::cloud::clouddms::v1::MigrationJob>
 DataMigrationServiceClient::ListMigrationJobs(
     google::cloud::clouddms::v1::ListMigrationJobsRequest request,

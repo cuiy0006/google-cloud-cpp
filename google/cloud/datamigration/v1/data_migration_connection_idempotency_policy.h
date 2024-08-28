@@ -22,6 +22,7 @@
 #include "google/cloud/idempotency.h"
 #include "google/cloud/version.h"
 #include <google/cloud/clouddms/v1/clouddms.grpc.pb.h>
+#include <google/cloud/location/locations.grpc.pb.h>
 #include <memory>
 
 namespace google {
@@ -36,6 +37,9 @@ class DataMigrationServiceConnectionIdempotencyPolicy {
   /// Create a new copy of this object.
   virtual std::unique_ptr<DataMigrationServiceConnectionIdempotencyPolicy>
   clone() const;
+
+  virtual google::cloud::Idempotency ListLocations(
+      google::cloud::location::ListLocationsRequest request);
 
   virtual google::cloud::Idempotency ListMigrationJobs(
       google::cloud::clouddms::v1::ListMigrationJobsRequest request);

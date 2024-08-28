@@ -32,6 +32,18 @@ DataMigrationServiceTracingStub::DataMigrationServiceTracingStub(
     std::shared_ptr<DataMigrationServiceStub> child)
     : child_(std::move(child)), propagator_(internal::MakePropagator()) {}
 
+StatusOr<google::cloud::location::ListLocationsResponse>
+DataMigrationServiceTracingStub::ListLocations(
+      grpc::ClientContext& context, Options const& options,
+      google::cloud::location::ListLocationsRequest const& request) {
+  auto span = internal::MakeSpanGrpc(
+      "google.cloud.location.Locations", "ListLocations");
+  auto scope = opentelemetry::trace::Scope(span);
+  internal::InjectTraceContext(context, *propagator_);
+  return internal::EndSpan(
+      context, *span, child_->ListLocations(context, options, request));
+}
+
 StatusOr<google::cloud::clouddms::v1::ListMigrationJobsResponse>
 DataMigrationServiceTracingStub::ListMigrationJobs(
     grpc::ClientContext& context, Options const& options,
