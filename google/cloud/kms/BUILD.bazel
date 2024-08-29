@@ -27,6 +27,8 @@ service_dirs = [
 googleapis_deps = [
     "@com_google_googleapis//google/cloud/kms/inventory/v1:inventory_cc_grpc",
     "@com_google_googleapis//google/cloud/kms/v1:kms_cc_grpc",
+    "@com_google_googleapis//google/cloud/location:location_cc_grpc",
+    "@com_google_googleapis//google/iam/v1:iam_cc_grpc",
 ]
 
 cc_gapic_library(

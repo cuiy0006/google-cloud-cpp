@@ -61,7 +61,8 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
     YAML::Node const& service_config,
     std::vector<std::pair<std::string, std::string>> const& vars) {
   std::vector<MixinMethod> mixin_methods;
-  if (service->name() == "DataMigrationService") {
+  if (service->file()->name() != "google/pubsub/v1/pubsub.proto" &&
+      service->file()->name() != "google/pubsub/v1/schema.proto") {
     mixin_methods = GetMixinMethods(service_config, *service);
     if (!mixin_methods.empty()) {
       std::cout << "###########################################"
@@ -87,17 +88,6 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
       CreateServiceVars(*service, vars, mixin_methods);
   auto method_vars =
       CreateMethodVars(*service, service_config, service_vars, mixin_methods);
-  if (service->name() == "DataMigrationService") {
-    std::cout << "###########################################@@" << std::endl;
-    for (auto& x : method_vars) {
-      if (x.first != "google.longrunning.Operations.GetOperation") continue;
-
-      std::cout << x.first << " : " << x.second["response_type"] << " : "
-                << x.second["return_type"] << " : "
-                << x.second["longrunning_deduced_response_type"] << std::endl;
-    }
-    std::cout << "###########################################@@" << std::endl;
-  }
   auto get_flag = [&](std::string const& key, bool default_value = false) {
     auto iter = service_vars.find(key);
     if (iter == service_vars.end()) return default_value;
