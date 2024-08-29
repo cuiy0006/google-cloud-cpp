@@ -30,6 +30,7 @@
 #include "generator/internal/logging_decorator_rest_generator.h"
 #include "generator/internal/metadata_decorator_generator.h"
 #include "generator/internal/metadata_decorator_rest_generator.h"
+#include "generator/internal/mixin_utils.h"
 #include "generator/internal/mock_connection_generator.h"
 #include "generator/internal/option_defaults_generator.h"
 #include "generator/internal/options_generator.h"
@@ -59,10 +60,44 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
     google::protobuf::compiler::GeneratorContext* context,
     YAML::Node const& service_config,
     std::vector<std::pair<std::string, std::string>> const& vars) {
+  std::vector<MixinMethod> mixin_methods;
+  if (service->name() == "DataMigrationService") {
+    mixin_methods = GetMixinMethods(service_config, *service);
+    if (!mixin_methods.empty()) {
+      std::cout << "###########################################"
+                << service->full_name() << std::endl;
+      for (auto const& mixin_method : mixin_methods) {
+        absl::optional<std::string> body =
+            mixin_method.method_override.http_body;
+
+        std::cout << mixin_method.method.get().full_name() << " "
+                  << mixin_method.grpc_stub_fqn << " "
+                  << mixin_method.grpc_stub_name << " "
+                  << mixin_method.method_override.http_verb << " "
+                  << mixin_method.method_override.http_path << " "
+                  << (body.has_value() ? *body : "") << std::endl;
+      }
+
+      std::cout << "###########################################" << std::endl;
+    }
+  }
   std::vector<std::string> sources;
   std::vector<std::unique_ptr<GeneratorInterface>> code_generators;
-  VarsDictionary service_vars = CreateServiceVars(*service, vars);
-  auto method_vars = CreateMethodVars(*service, service_config, service_vars);
+  VarsDictionary service_vars =
+      CreateServiceVars(*service, vars, mixin_methods);
+  auto method_vars =
+      CreateMethodVars(*service, service_config, service_vars, mixin_methods);
+  if (service->name() == "DataMigrationService") {
+    std::cout << "###########################################@@" << std::endl;
+    for (auto& x : method_vars) {
+      if (x.first != "google.longrunning.Operations.GetOperation") continue;
+
+      std::cout << x.first << " : " << x.second["response_type"] << " : "
+                << x.second["return_type"] << " : "
+                << x.second["longrunning_deduced_response_type"] << std::endl;
+    }
+    std::cout << "###########################################@@" << std::endl;
+  }
   auto get_flag = [&](std::string const& key, bool default_value = false) {
     auto iter = service_vars.find(key);
     if (iter == service_vars.end()) return default_value;
@@ -75,70 +110,70 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
 
   if (!omit_client) {
     code_generators.push_back(std::make_unique<ClientGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<SampleGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
   }
   if (!get_flag("omit_connection")) {
     if (generate_grpc_transport) {
       code_generators.push_back(std::make_unique<ConnectionImplGenerator>(
-          service, service_vars, method_vars, context));
+          service, service_vars, method_vars, context, mixin_methods));
     }
     code_generators.push_back(std::make_unique<ConnectionGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<IdempotencyPolicyGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<MockConnectionGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<OptionDefaultsGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<OptionsGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     if (service_vars.find("retry_status_code_expression") !=
         service_vars.end()) {
       code_generators.push_back(std::make_unique<RetryTraitsGenerator>(
-          service, service_vars, method_vars, context));
+          service, service_vars, method_vars, context, mixin_methods));
     }
     code_generators.push_back(std::make_unique<TracingConnectionGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
   }
   if (!get_flag("omit_stub_factory") && generate_grpc_transport) {
     code_generators.push_back(std::make_unique<StubFactoryGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
   }
   auto const forwarding_headers = service_vars.find("forwarding_product_path");
   if (forwarding_headers != service_vars.end() &&
       !forwarding_headers->second.empty()) {
     code_generators.push_back(std::make_unique<ForwardingClientGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<ForwardingConnectionGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(
         std::make_unique<ForwardingIdempotencyPolicyGenerator>(
-            service, service_vars, method_vars, context));
+            service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(
         std::make_unique<ForwardingMockConnectionGenerator>(
-            service, service_vars, method_vars, context));
+            service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<ForwardingOptionsGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
   }
 
   if (generate_grpc_transport) {
     code_generators.push_back(std::make_unique<AuthDecoratorGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<LoggingDecoratorGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<MetadataDecoratorGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<StubGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<TracingStubGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
   }
 
   if (get_flag("generate_round_robin_decorator")) {
     code_generators.push_back(std::make_unique<RoundRobinDecoratorGenerator>(
-        service, service_vars, method_vars, context));
+        service, service_vars, method_vars, context, mixin_methods));
     sources.push_back(service_vars["round_robin_cc_path"]);
   }
 
@@ -148,17 +183,17 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
     auto rest_service_vars = service_vars;
     rest_service_vars.erase("backwards_compatibility_namespace_alias");
     code_generators.push_back(std::make_unique<ConnectionRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<ConnectionImplRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<LoggingDecoratorRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<MetadataDecoratorRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<StubFactoryRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
     code_generators.push_back(std::make_unique<StubRestGenerator>(
-        service, rest_service_vars, method_vars, context));
+        service, rest_service_vars, method_vars, context, mixin_methods));
   }
 
   if (!omit_client) {
@@ -195,7 +230,8 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
 
     std::sort(sources.begin(), sources.end());
     code_generators.push_back(std::make_unique<SourcesGenerator>(
-        service, service_vars, method_vars, context, std::move(sources)));
+        service, service_vars, method_vars, context, std::move(sources),
+        mixin_methods));
   }
 
   return code_generators;

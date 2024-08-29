@@ -18,6 +18,7 @@
 #include "generator/internal/descriptor_utils.h"
 #include "generator/internal/discovery_to_proto.h"
 #include "generator/internal/format_method_comments.h"
+#include "generator/internal/mixin_utils.h"
 #include "generator/internal/scaffold_generator.h"
 #include "google/cloud/internal/absl_str_cat_quiet.h"
 #include "google/cloud/internal/absl_str_join_quiet.h"
@@ -70,6 +71,7 @@ using ::google::cloud::generator_internal::CheckMethodCommentSubstitutions;
 using ::google::cloud::generator_internal::CheckParameterCommentSubstitutions;
 using ::google::cloud::generator_internal::GenerateMetadata;
 using ::google::cloud::generator_internal::GenerateScaffold;
+using ::google::cloud::generator_internal::GetMixinProtoPaths;
 using ::google::cloud::generator_internal::LibraryName;
 using ::google::cloud::generator_internal::LibraryPath;
 using ::google::cloud::generator_internal::LoadApiIndex;
@@ -370,6 +372,19 @@ std::vector<std::future<google::cloud::Status>> GenerateCodeFromProtos(
     if (!path.empty()) {
       args.emplace_back(absl::StrCat("--cpp_codegen_opt=service_config_yaml=",
                                      std::move(path)));
+      // if (service.service_proto_path() ==
+      //     "google/cloud/clouddms/v1/clouddms.proto") {
+      std::vector<std::string> const mixin_proto_paths =
+          GetMixinProtoPaths(path);
+
+      // std::cout << "-----------------------------"
+      //           << service.service_proto_path() << std::endl;
+      // for (auto const& mixin_proto_path : mixin_proto_paths) {
+      //   std::cout << mixin_proto_path << std::endl;
+      //   args.emplace_back("--cpp_codegen_opt=additional_proto_file=" +
+      //                     mixin_proto_path);
+      // }
+      // std::cout << "-----------------------------" << std::endl;
     }
 
     GCP_LOG(INFO) << "Generating service code using: "
