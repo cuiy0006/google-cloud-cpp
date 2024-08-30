@@ -61,27 +61,25 @@ std::vector<std::unique_ptr<GeneratorInterface>> MakeGenerators(
     YAML::Node const& service_config,
     std::vector<std::pair<std::string, std::string>> const& vars) {
   std::vector<MixinMethod> mixin_methods;
-  if (service->file()->name() != "google/pubsub/v1/pubsub.proto") {
-    mixin_methods = GetMixinMethods(service_config, *service);
-    // if (!mixin_methods.empty()) {
-    //   std::cout << "###########################################"
-    //             << service->full_name() << std::endl;
-    //   for (auto const& mixin_method : mixin_methods) {
-    //   absl::optional<std::string> body =
-    //   mixin_method.method_override.http_body;
+  mixin_methods = GetMixinMethods(service_config, *service);
+  // if (!mixin_methods.empty()) {
+  //   std::cout << "###########################################"
+  //             << service->full_name() << std::endl;
+  //   for (auto const& mixin_method : mixin_methods) {
+  //   absl::optional<std::string> body =
+  //   mixin_method.method_override.http_body;
 
-    //   std::cout << mixin_method.method.get().full_name() << " "
-    //             << mixin_method.grpc_stub_fqn << " "
-    //             << mixin_method.grpc_stub_name << " "
-    //             << mixin_method.method_override.http_verb << " "
-    //             << mixin_method.method_override.http_path << " "
-    //             << (body.has_value() ? *body : "") << std::endl;
-    //     }
+  //   std::cout << mixin_method.method.get().full_name() << " "
+  //             << mixin_method.grpc_stub_fqn << " "
+  //             << mixin_method.grpc_stub_name << " "
+  //             << mixin_method.method_override.http_verb << " "
+  //             << mixin_method.method_override.http_path << " "
+  //             << (body.has_value() ? *body : "") << std::endl;
+  //     }
 
-    //     std::cout << "###########################################" <<
-    //     std::endl;
-    // }
-  }
+  //     std::cout << "###########################################" <<
+  //     std::endl;
+  // }
   std::vector<std::string> sources;
   std::vector<std::unique_ptr<GeneratorInterface>> code_generators;
   VarsDictionary service_vars =
