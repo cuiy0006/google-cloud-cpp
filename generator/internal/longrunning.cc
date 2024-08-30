@@ -75,12 +75,8 @@ DeduceLongrunningOperationResponseType(
 }  // namespace
 
 bool IsLongrunningOperation(MethodDescriptor const& method) {
-  bool grpc_lro =
-      method.output_type()->full_name() == "google.longrunning.Operation";
-  auto operation_service_extension =
-      method.options().GetExtension(google::cloud::operation_service);
-  bool http_lro = !operation_service_extension.empty();
-  return grpc_lro || http_lro;
+  return IsGRPCLongrunningOperation(method) ||
+         IsHttpLongrunningOperation(method);
 }
 
 bool IsLongrunningMetadataTypeUsedAsResponse(MethodDescriptor const& method) {
@@ -95,6 +91,8 @@ bool IsLongrunningMetadataTypeUsedAsResponse(MethodDescriptor const& method) {
 void SetLongrunningOperationMethodVars(
     google::protobuf::MethodDescriptor const& method,
     VarsDictionary& method_vars) {
+  if (!IsLongrunningOperation(method)) return;
+
   method_vars["longrunning_operation_type"] =
       ProtoNameToCppName(method.output_type()->full_name());
 
@@ -136,7 +134,8 @@ void SetLongrunningOperationMethodVars(
 }
 
 bool IsGRPCLongrunningOperation(MethodDescriptor const& method) {
-  return method.output_type()->full_name() == "google.longrunning.Operation";
+  return method.output_type()->full_name() == "google.longrunning.Operation" &&
+         method.options().HasExtension(google::longrunning::operation_info);
 }
 
 bool IsHttpLongrunningOperation(MethodDescriptor const& method) {

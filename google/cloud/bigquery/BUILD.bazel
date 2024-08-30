@@ -46,6 +46,8 @@ googleapis_deps = [
     "@com_google_googleapis//google/cloud/bigquery/migration/v2:migration_cc_grpc",
     "@com_google_googleapis//google/cloud/bigquery/reservation/v1:reservation_cc_grpc",
     "@com_google_googleapis//google/cloud/bigquery/storage/v1:storage_cc_grpc",
+    "@com_google_googleapis//google/cloud/location:location_cc_grpc",
+    "@com_google_googleapis//google/iam/v1:iam_cc_grpc",
 ]
 
 cc_gapic_library(

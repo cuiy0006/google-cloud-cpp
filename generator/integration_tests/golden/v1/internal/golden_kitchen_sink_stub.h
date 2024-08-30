@@ -129,7 +129,7 @@ class DefaultGoldenKitchenSinkStub : public GoldenKitchenSinkStub {
  public:
   explicit DefaultGoldenKitchenSinkStub(
       std::unique_ptr<google::test::admin::database::v1::GoldenKitchenSink::StubInterface> grpc_stub)
-      : grpc_stub_(std::move(grpc_stub)) {}
+      : grpc_stub_(std::move(grpc_stub)){}
 
   StatusOr<google::test::admin::database::v1::GenerateAccessTokenResponse> GenerateAccessToken(
       grpc::ClientContext& context,

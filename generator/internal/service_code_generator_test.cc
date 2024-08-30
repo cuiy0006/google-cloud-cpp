@@ -44,9 +44,12 @@ class TestGenerator : public ServiceCodeGenerator {
   TestGenerator(google::protobuf::ServiceDescriptor const* service_descriptor,
                 google::protobuf::compiler::GeneratorContext* context,
                 VarsDictionary service_vars = {{"header_path_key",
-                                                "header_path"}})
+                                                "header_path"}},
+                std::vector<MixinMethod> const& mixin_methods =
+                    std::vector<MixinMethod>())
       : ServiceCodeGenerator("header_path_key", service_descriptor,
-                             std::move(service_vars), {}, context) {}
+                             std::move(service_vars), {}, context,
+                             mixin_methods) {}
 
   using ServiceCodeGenerator::GetPbIncludeByTransport;
   using ServiceCodeGenerator::HasBidirStreamingMethod;
