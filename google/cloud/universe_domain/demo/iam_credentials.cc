@@ -43,7 +43,7 @@ void GenerateAccessToken(std::vector<std::string> const& argv) {
     auto ud_options = gc::AddUniverseDomainOption(gc::ExperimentalTag{}, options);
     if (!ud_options.ok()) throw std::move(ud_options).status();
 
-    iam::IAMCredentialsClient client(iam::MakeIAMCredentialsConnection());
+    iam::IAMCredentialsClient client(iam::MakeIAMCredentialsConnection(*ud_options));
     google::protobuf::Duration lifetime;
     lifetime.set_seconds(std::stoi(lifetime_seconds));
     auto response = client.GenerateAccessToken(name, {}, scope, lifetime);
