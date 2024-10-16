@@ -43,6 +43,18 @@ IAMCredentialsClient::GenerateAccessToken(
   *request.mutable_delegates() = {delegates.begin(), delegates.end()};
   *request.mutable_scope() = {scope.begin(), scope.end()};
   *request.mutable_lifetime() = lifetime;
+
+  std::cout << "name:" << request.name() << std::endl;
+  std::cout << "delegates:" << std::endl;
+  for (std::string const& delegate : request.delegates()) {
+    std::cout << "  " << delegate << std::endl;
+  }
+  std::cout << "scopes:" << std::endl;
+  for (std::string const& scope : request.scope()) {
+    std::cout << "  " << scope << std::endl;
+  }
+  std::cout << "lifetime:" << request.lifetime().seconds() << std::endl;
+
   return connection_->GenerateAccessToken(request);
 }
 
