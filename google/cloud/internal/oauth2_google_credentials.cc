@@ -24,6 +24,7 @@
 #include "google/cloud/internal/oauth2_http_client_factory.h"
 #include "google/cloud/internal/oauth2_service_account_credentials.h"
 #include "google/cloud/internal/parse_service_account_p12_file.h"
+#include "google/cloud/internal/oauth2_impersonate_service_account_credentials.h"
 #include "google/cloud/internal/throw_delegate.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -97,6 +98,12 @@ StatusOr<std::unique_ptr<Credentials>> LoadCredsFromPath(
         std::make_unique<ServiceAccountCredentials>(*info, options,
                                                     std::move(client_factory)));
   }
+  if (cred_type == "impersonated_service_account") {
+    auto cfg = MakeImpersonateServiceAccountConfig(contents, options, internal::ErrorContext{});
+    if (!cfg) return std::move(cfg).status();
+    return std::unique_ptr<Credentials>(
+      std::make_unique<ImpersonateServiceAccountCredentials>(*cfg, std::move(client_factory)));
+  }
   return internal::InvalidArgumentError(
       "Unsupported credential type (" + cred_type +
           ") when reading Application Default Credentials file "
@@ -131,6 +138,9 @@ StatusOr<std::unique_ptr<Credentials>> MaybeLoadCredsFromAdcPaths(
     auto adc_file_status = google::cloud::internal::status(path, ec);
     if (!google::cloud::internal::exists(adc_file_status)) return {nullptr};
   }
+
+  std::cout << path << std::endl;
+  std::cout << "--------------------------------------" << std::endl;
 
   // If the path was specified, try to load that file; explicitly fail if it
   // doesn't exist or can't be read and parsed.

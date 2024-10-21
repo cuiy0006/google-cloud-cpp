@@ -68,10 +68,12 @@ AccessTokenConfig::AccessTokenConfig(
 
 ImpersonateServiceAccountConfig::ImpersonateServiceAccountConfig(
     std::shared_ptr<Credentials> base_credentials,
-    std::string target_service_account, Options opts)
+    std::string target_service_account, Options opts,
+    absl::optional<std::string> service_account_impersonation_url)
     : base_credentials_(std::move(base_credentials)),
       target_service_account_(std::move(target_service_account)),
-      options_(PopulateAuthOptions(std::move(opts))) {}
+      options_(PopulateAuthOptions(std::move(opts))),
+      service_account_impersonation_url_(std::move(service_account_impersonation_url)) {}
 
 std::chrono::seconds ImpersonateServiceAccountConfig::lifetime() const {
   return options_.get<AccessTokenLifetimeOption>();
