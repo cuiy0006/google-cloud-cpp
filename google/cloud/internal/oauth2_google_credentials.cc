@@ -139,9 +139,6 @@ StatusOr<std::unique_ptr<Credentials>> MaybeLoadCredsFromAdcPaths(
     if (!google::cloud::internal::exists(adc_file_status)) return {nullptr};
   }
 
-  std::cout << path << std::endl;
-  std::cout << "--------------------------------------" << std::endl;
-
   // If the path was specified, try to load that file; explicitly fail if it
   // doesn't exist or can't be read and parsed.
   return LoadCredsFromPath(path, options, std::move(client_factory));

@@ -22,6 +22,7 @@
 #include "google/cloud/internal/grpc_service_account_authentication.h"
 #include <grpcpp/security/credentials.h>
 #include <fstream>
+#include "google/cloud/internal/grpc_google_credentials.h"
 
 namespace {
 
@@ -102,6 +103,11 @@ std::shared_ptr<GrpcAuthenticationStrategy> CreateAuthenticationStrategy(
           grpc::InsecureChannelCredentials());
     }
     void visit(GoogleDefaultCredentialsConfig const&) override {
+      auto ret = MaybeLoadImpersonationCredentials(std::move(cq), std::move(options));
+      if (ret) {
+        result = *ret;
+        return;
+      }
       result = std::make_unique<GrpcChannelCredentialsAuthentication>(
           grpc::GoogleDefaultCredentials());
     }

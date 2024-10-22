@@ -32,7 +32,7 @@ AsyncAccessTokenSource MakeSource(ImpersonateServiceAccountConfig const& config,
   auto stub = MakeMinimalIamCredentialsStub(
       CreateAuthenticationStrategy(*config.base_credentials(), std::move(cq),
                                    options),
-      MakeMinimalIamCredentialsOptions(options));
+      MakeMinimalIamCredentialsOptions(options, config.service_account_impersonation_url()));
 
   GenerateAccessTokenRequest request;
   request.set_name("projects/-/serviceAccounts/" +

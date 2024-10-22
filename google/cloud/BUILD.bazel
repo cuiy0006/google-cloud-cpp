@@ -165,6 +165,7 @@ cc_library(
     ],
     deps = [
         ":google_cloud_cpp_common",
+        ":google_cloud_cpp_rest_internal",
         "@com_github_grpc_grpc//:grpc++",
         "@com_google_absl//absl/functional:function_ref",
         "@com_google_absl//absl/time",
@@ -175,6 +176,7 @@ cc_library(
         "@com_google_googleapis//google/longrunning:longrunning_cc_grpc",
         "@com_google_googleapis//google/rpc:error_details_cc_proto",
         "@com_google_googleapis//google/rpc:status_cc_proto",
+        "@com_github_nlohmann_json//:json",
     ],
 )
 
