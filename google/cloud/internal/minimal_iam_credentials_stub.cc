@@ -228,10 +228,14 @@ std::shared_ptr<MinimalIamCredentialsStub> MakeMinimalIamCredentialsStub(
   return DecorateMinimalIamCredentialsStub(std::move(impl), options);
 }
 
-Options MakeMinimalIamCredentialsOptions(Options options) {
+Options MakeMinimalIamCredentialsOptions(Options options, absl::optional<std::string> service_account_impersonation_url) {
   // The supplied options come from a service. We are overriding the value of
   // its `EndpointOption`.
   options.unset<EndpointOption>();
+  if (service_account_impersonation_url) {
+    return options.set<EndpointOption>(
+        *service_account_impersonation_url);
+  }
   auto ep = UniverseDomainEndpoint("iamcredentials.googleapis.com", options);
   return options.set<EndpointOption>(std::move(ep));
 }

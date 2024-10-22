@@ -119,7 +119,8 @@ class ImpersonateServiceAccountConfig : public Credentials {
  public:
   ImpersonateServiceAccountConfig(std::shared_ptr<Credentials> base_credentials,
                                   std::string target_service_account,
-                                  Options opts);
+                                  Options opts,
+                                  absl::optional<std::string> service_account_impersonation_url = absl::nullopt);
 
   std::shared_ptr<Credentials> base_credentials() const {
     return base_credentials_;
@@ -131,6 +132,9 @@ class ImpersonateServiceAccountConfig : public Credentials {
   std::vector<std::string> const& scopes() const;
   std::vector<std::string> const& delegates() const;
   Options const& options() const { return options_; }
+  absl::optional<std::string> const& service_account_impersonation_url() const {
+    return service_account_impersonation_url_;
+  }
 
  private:
   void dispatch(CredentialsVisitor& v) const override { v.visit(*this); }
@@ -138,6 +142,7 @@ class ImpersonateServiceAccountConfig : public Credentials {
   std::shared_ptr<Credentials> base_credentials_;
   std::string target_service_account_;
   Options options_;
+  absl::optional<std::string> service_account_impersonation_url_;
 };
 
 class ServiceAccountConfig : public Credentials {

@@ -37,10 +37,13 @@ using ::google::cloud::internal::InvalidArgumentError;
 
 MinimalIamCredentialsRestStub::MinimalIamCredentialsRestStub(
     std::shared_ptr<oauth2_internal::Credentials> credentials, Options options,
-    HttpClientFactory client_factory)
+    HttpClientFactory client_factory,
+    absl::optional<std::string> service_account_impersonation_url)
     : credentials_(std::move(credentials)),
       options_(std::move(options)),
-      client_factory_(std::move(client_factory)) {}
+      client_factory_(std::move(client_factory)),
+      service_account_impersonation_url_(
+          std::move(service_account_impersonation_url)) {}
 
 StatusOr<google::cloud::AccessToken>
 MinimalIamCredentialsRestStub::GenerateAccessToken(
@@ -52,7 +55,7 @@ MinimalIamCredentialsRestStub::GenerateAccessToken(
   rest_internal::RestRequest rest_request;
   rest_request.AddHeader(auth_header.value());
   rest_request.AddHeader("Content-Type", "application/json");
-  rest_request.SetPath(MakeRequestPath(request));
+  rest_request.SetPath(service_account_impersonation_url_ ? *service_account_impersonation_url_ : MakeRequestPath(request));
   nlohmann::json payload{
       {"delegates", request.delegates},
       {"scope", request.scopes},
@@ -134,14 +137,14 @@ StatusOr<AccessToken> ParseGenerateAccessTokenResponse(
 
 std::shared_ptr<MinimalIamCredentialsRest> MakeMinimalIamCredentialsRestStub(
     std::shared_ptr<oauth2_internal::Credentials> credentials, Options options,
-    HttpClientFactory client_factory) {
+    HttpClientFactory client_factory, absl::optional<std::string> service_account_impersonation_url) {
   auto enable_logging =
       options.get<LoggingComponentsOption>().count("rpc") != 0 ||
       options.get<LoggingComponentsOption>().count("raw-client") != 0;
   std::shared_ptr<MinimalIamCredentialsRest> stub =
       std::make_shared<MinimalIamCredentialsRestStub>(
           std::move(credentials), std::move(options),
-          std::move(client_factory));
+          std::move(client_factory), std::move(service_account_impersonation_url));
   if (enable_logging) {
     stub = std::make_shared<MinimalIamCredentialsRestLogging>(std::move(stub));
   }

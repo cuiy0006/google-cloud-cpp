@@ -20,11 +20,26 @@
 #include "google/cloud/version.h"
 #include <memory>
 #include <string>
+#include <nlohmann/json.hpp>
+#include "google/cloud/internal/make_status.h"
+#include "google/cloud/internal/absl_str_cat_quiet.h"
+#include "absl/strings/str_split.h"
+
+#include "google/cloud/internal/json_parsing.h"
+#include "google/cloud/internal/oauth2_external_account_credentials.h"
+#include "google/cloud/internal/oauth2_authorized_user_credentials.h"
+#include "google/cloud/internal/oauth2_service_account_credentials.h"
+
+#include <fstream>
+#include <stdlib.h>
 
 namespace google {
 namespace cloud {
 namespace oauth2_internal {
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_BEGIN
+
+StatusOr<google::cloud::internal::ImpersonateServiceAccountConfig> MakeImpersonateServiceAccountConfig(
+    std::string const& content, Options options, internal::ErrorContext const& ec);
 
 /**
  * Provides Credentials when impersonating an existing service account.

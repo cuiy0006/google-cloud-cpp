@@ -37,6 +37,7 @@ struct GenerateAccessTokenRequest {
   std::chrono::seconds lifetime;
   std::vector<std::string> scopes;
   std::vector<std::string> delegates;
+  absl::optional<std::string> service_account_impersonation_url;
 };
 
 /// Parse the HTTP response from a `GenerateAccessToken()` call.
@@ -73,7 +74,8 @@ class MinimalIamCredentialsRestStub : public MinimalIamCredentialsRest {
    */
   MinimalIamCredentialsRestStub(
       std::shared_ptr<oauth2_internal::Credentials> credentials,
-      Options options, HttpClientFactory client_factory);
+      Options options, HttpClientFactory client_factory,
+      absl::optional<std::string> service_account_impersonation_url = absl::nullopt);
 
   StatusOr<google::cloud::AccessToken> GenerateAccessToken(
       GenerateAccessTokenRequest const& request) override;
@@ -88,6 +90,7 @@ class MinimalIamCredentialsRestStub : public MinimalIamCredentialsRest {
   std::shared_ptr<oauth2_internal::Credentials> credentials_;
   Options options_;
   HttpClientFactory client_factory_;
+  absl::optional<std::string> service_account_impersonation_url_;
 };
 
 /**
@@ -111,7 +114,7 @@ class MinimalIamCredentialsRestLogging : public MinimalIamCredentialsRest {
 
 std::shared_ptr<MinimalIamCredentialsRest> MakeMinimalIamCredentialsRestStub(
     std::shared_ptr<oauth2_internal::Credentials> credentials, Options options,
-    HttpClientFactory client_factory);
+    HttpClientFactory client_factory, absl::optional<std::string> service_account_impersonation_url = absl::nullopt);
 
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
 }  // namespace oauth2_internal

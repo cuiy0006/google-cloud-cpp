@@ -34,13 +34,89 @@ GenerateAccessTokenRequest MakeRequest(
 
 }  // namespace
 
+StatusOr<google::cloud::internal::ImpersonateServiceAccountConfig> MakeImpersonateServiceAccountConfig(
+    std::string const& content, Options options, internal::ErrorContext const& ec) {
+  auto json = nlohmann::json::parse(content, nullptr, false);
+  if (!json.is_object()) {
+    return InvalidArgumentError(
+        "impersonate service account configuration was not a JSON object",
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+  auto type = ValidateStringField(json, "type", "credentials-file", ec);
+  if (!type) return std::move(type).status();
+  if (*type != "impersonated_service_account") {
+    return InvalidArgumentError(
+        "mismatched type (" + *type + ") in external account configuration",
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+
+  auto service_account_impersonation_url = ValidateStringField(json, "service_account_impersonation_url", "credentials-file", ec);
+  if (!service_account_impersonation_url) return std::move(service_account_impersonation_url).status();
+  
+  std::vector<std::string> v = absl::StrSplit(*service_account_impersonation_url, "/serviceAccounts/");
+  if (v.size() != 2) {
+    return InvalidArgumentError(
+        absl::StrCat("malformed service_account_impersonation_url: ", *service_account_impersonation_url),
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+  v = absl::StrSplit(v[1], ':');
+  if (v.size() != 2) {
+    return InvalidArgumentError(
+        absl::StrCat("malformed service_account_impersonation_url: ", *service_account_impersonation_url),
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+  auto target_service_account = v[0];
+
+  auto delegates = json.find("delegates");
+  if (delegates != json.end()) {
+    if (!delegates->is_array()) {
+      return InvalidArgumentError(
+          "delegates must be an array", GCP_ERROR_INFO().WithContext(ec));
+    }
+    options.set<DelegatesOption>(delegates->get<std::vector<std::string>>());
+  }
+
+  auto source_credentials = json.find("source_credentials");
+  if (source_credentials == json.end()) {
+    return InvalidArgumentError(
+        "missing `source_credentials` field in impersonation service account configuration",
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+
+  if (!source_credentials->is_object()) {
+    return InvalidArgumentError(
+        "`source_credentials` field is not a JSON object in impersonation service account configuration",
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+  auto const source_credentials_contents = source_credentials->dump();
+  // save source_credentials_contents to a tmp file
+  (void)setenv("GOOGLE_APPLICATION_CREDENTIALS", "/tmp/base_credentials.json", 1);
+
+  std::ofstream myfile;
+  myfile.open ("/tmp/base_credentials.json");
+  myfile << source_credentials_contents;
+  myfile.close();
+
+  auto const cred_type = ValidateStringField(*source_credentials, "type", "credentials-file", ec);
+  if (!type) return std::move(type).status();
+
+  if ((*cred_type != "authorized_user" && *cred_type != "external_account" && *cred_type != "service_account")) {
+    return internal::InvalidArgumentError(
+        "Unsupported credential type : " + *cred_type,
+        GCP_ERROR_INFO().WithContext(ec));
+  }
+
+  return google::cloud::internal::ImpersonateServiceAccountConfig(
+    MakeGoogleDefaultCredentials(options), target_service_account, options, *service_account_impersonation_url);
+}
+
 ImpersonateServiceAccountCredentials::ImpersonateServiceAccountCredentials(
     google::cloud::internal::ImpersonateServiceAccountConfig const& config,
     HttpClientFactory client_factory)
     : ImpersonateServiceAccountCredentials(
           config, MakeMinimalIamCredentialsRestStub(
                       rest_internal::MapCredentials(*config.base_credentials()),
-                      config.options(), std::move(client_factory))) {}
+                      config.options(), std::move(client_factory), config.service_account_impersonation_url())) {}
 
 ImpersonateServiceAccountCredentials::ImpersonateServiceAccountCredentials(
     google::cloud::internal::ImpersonateServiceAccountConfig const& config,
