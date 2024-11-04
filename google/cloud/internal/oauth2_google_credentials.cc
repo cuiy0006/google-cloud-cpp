@@ -24,6 +24,7 @@
 #include "google/cloud/internal/oauth2_http_client_factory.h"
 #include "google/cloud/internal/oauth2_service_account_credentials.h"
 #include "google/cloud/internal/parse_service_account_p12_file.h"
+#include "google/cloud/internal/oauth2_impersonate_service_account_credentials.h"
 #include "google/cloud/internal/throw_delegate.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
@@ -96,6 +97,12 @@ StatusOr<std::unique_ptr<Credentials>> LoadCredsFromPath(
     return std::unique_ptr<Credentials>(
         std::make_unique<ServiceAccountCredentials>(*info, options,
                                                     std::move(client_factory)));
+  }
+  if (cred_type == "impersonated_service_account") {
+    auto cfg = MakeImpersonateServiceAccountConfig(contents, options, internal::ErrorContext{});
+    if (!cfg) return std::move(cfg).status();
+    return std::unique_ptr<Credentials>(
+      std::make_unique<ImpersonateServiceAccountCredentials>(*cfg, std::move(client_factory)));
   }
   return internal::InvalidArgumentError(
       "Unsupported credential type (" + cred_type +

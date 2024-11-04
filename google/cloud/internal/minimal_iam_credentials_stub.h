@@ -71,7 +71,7 @@ std::shared_ptr<MinimalIamCredentialsStub> MakeMinimalIamCredentialsStub(
     std::shared_ptr<GrpcAuthenticationStrategy> auth_strategy,
     Options const& options);
 
-Options MakeMinimalIamCredentialsOptions(Options options);
+Options MakeMinimalIamCredentialsOptions(Options options, absl::optional<std::string> service_account_impersonation_url = absl::nullopt);
 
 }  // namespace internal
 GOOGLE_CLOUD_CPP_INLINE_NAMESPACE_END
