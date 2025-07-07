@@ -16,6 +16,10 @@
 
 find_package(opentelemetry-cpp CONFIG REQUIRED)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 set(DOXYGEN_PROJECT_NAME "C++ OpenTelemetry Exporters for Google Cloud")
 set(DOXYGEN_PROJECT_BRIEF
     "Provides exporters for sending telemetry to Google Cloud services in C++.")
